@@ -1,0 +1,39 @@
+.elementor-694 .elementor-element.elementor-element-ed97820{transition:background 0.3s, border 0.3s, border-radius 0.3s, box-shadow 0.3s;}.elementor-694 .elementor-element.elementor-element-ed97820 > .elementor-background-overlay{transition:background 0.3s, border-radius 0.3s, opacity 0.3s;}.woocommerce .elementor-694 .elementor-element.elementor-element-e223b6c .flex-viewport:not(:last-child){margin-bottom:0px;}.woocommerce .elementor-694 .elementor-element.elementor-element-e223b6c .flex-control-thumbs li{padding-right:calc(0px / 2);padding-left:calc(0px / 2);padding-bottom:0px;}.woocommerce .elementor-694 .elementor-element.elementor-element-e223b6c .flex-control-thumbs{margin-right:calc(-0px / 2);margin-left:calc(-0px / 2);}.elementor-694 .elementor-element.elementor-element-c1e2086 .elementor-button .elementor-align-icon-right{margin-left:0px;}.elementor-694 .elementor-element.elementor-element-c1e2086 .elementor-button .elementor-align-icon-left{margin-right:0px;}.elementor-694 .elementor-element.elementor-element-c1e2086 .elementor-button{font-family:"Noto Sans TC", Sans-serif;font-weight:500;background-color:#A5E143;}.elementor-694 .elementor-element.elementor-element-d4634ce .elementor-heading-title{color:#00612C;font-family:"Noto Sans TC", Sans-serif;font-weight:700;}.woocommerce .elementor-694 .elementor-element.elementor-element-59b65f6 .price{color:#BABBBF;font-family:"Noto Sans TC", Sans-serif;font-weight:700;}.woocommerce .elementor-694 .elementor-element.elementor-element-59b65f6 .price ins{color:#F15200;font-family:"Noto Sans TC", Sans-serif;font-weight:700;}.elementor-694 .elementor-element.elementor-element-2bb0fd2 .elementor-heading-title{color:#FFFFFF;font-family:"Noto Sans TC", Sans-serif;font-weight:600;-webkit-text-stroke-color:#000;stroke:#000;}@media(max-width:767px){.elementor-694 .elementor-element.elementor-element-ed97820{margin-top:048px;margin-bottom:0px;padding:0px 0px 0px 0px;}.elementor-694 .elementor-element.elementor-element-e223b6c > .elementor-widget-container{margin:0px 0px -40px 0px;padding:0px 0px 0px 0px;}.elementor-694 .elementor-element.elementor-element-c1e2086 .elementor-button{font-size:18px;border-radius:20px 20px 20px 20px;}.elementor-694 .elementor-element.elementor-element-c1e2086 > .elementor-widget-container{padding:0px 20px 0px 20px;}.elementor-694 .elementor-element.elementor-element-e323b02{margin-top:-30px;margin-bottom:0px;padding:0px 0px 0px 10px;}.elementor-694 .elementor-element.elementor-element-d4634ce .elementor-heading-title{font-size:24px;}.elementor-694 .elementor-element.elementor-element-59b65f6{text-align:left;}.woocommerce .elementor-694 .elementor-element.elementor-element-59b65f6 .price{font-size:21px;}.woocommerce .elementor-694 .elementor-element.elementor-element-59b65f6 .price ins{font-size:21px;}.elementor-694 .elementor-element.elementor-element-aff2f8b{width:100%;}.elementor-694 .elementor-element.elementor-element-aff2f8b > .elementor-element-populated{margin:0px 0px 0px 0px;--e-column-margin-right:0px;--e-column-margin-left:0px;padding:0px 0px 0px 0px;}.elementor-694 .elementor-element.elementor-element-2bb0fd2{text-align:center;}.elementor-694 .elementor-element.elementor-element-2bb0fd2 .elementor-heading-title{font-size:24px;}.elementor-694 .elementor-element.elementor-element-2bb0fd2 > .elementor-widget-container{margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;}}/* Start custom CSS for wc-add-to-cart, class: .elementor-element-c1e2086 */.woocommerce .quantity .qty {
+    width: 3.631em;
+    text-align: center;
+    min-height: 35px;
+    background-color: #A5E143;
+    border-radius: 20px;
+    color: white;
+}/* End custom CSS */
+/* Start custom CSS for woocommerce-product-short-description, class: .elementor-element-daa3e67 */.mes::before{
+    content: url(http://bike.meihao.shopping/wp-content/uploads/2023/09/Ellipse-61.png);
+    margin-right: 10px;
+    display: flex;
+align-items: stretch;
+}
+.mes{
+font-family: Noto Sans TC;
+font-size: 15px;
+font-style: normal;
+font-weight: 400;
+display: flex;
+align-items: stretch;
+
+}/* End custom CSS */
+/* Start custom CSS for heading, class: .elementor-element-2bb0fd2 */.test1{
+    background-image: url('http://bike.meihao.shopping/wp-content/uploads/2023/08/title-1.png');
+    background-size: 100% 100% ;
+    background-repeat: no-repeat;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}/* End custom CSS */
+/* Start custom CSS for woocommerce-product-data-tabs, class: .elementor-element-6d8f419 */ul.tabs.wc-tabs {
+    display: none
+}
+.woocommerce div.product.elementor .woocommerce-tabs .panel {
+    display: none;
+    border-top: 0px !important;
+}/* End custom CSS */

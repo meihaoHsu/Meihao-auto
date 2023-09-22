@@ -1,0 +1,11 @@
+2023-09-11T06:47:02+00:00 CRITICAL Uncaught Error: Call to undefined method WP_Post::get_type() in /var/www/bike.meihao.shopping/htdocs/wp-content/themes/astra-child/custom-function.php:109
+Stack trace:
+#0 /var/www/bike.meihao.shopping/htdocs/wp-includes/class-wp-hook.php(308): CustomFunction->set_product_filter_content()
+#1 /var/www/bike.meihao.shopping/htdocs/wp-includes/plugin.php(205): WP_Hook->apply_filters()
+#2 /var/www/bike.meihao.shopping/htdocs/wp-content/plugins/category-ajax-filter-pro/admin/post-class.php(389): apply_filters()
+#3 /var/www/bike.meihao.shopping/htdocs/wp-includes/class-wp-hook.php(308): CAF_POST_ACTIONS->caf_get_post_read_more()
+#4 /var/www/bike.meihao.shopping/htdocs/wp-includes/class-wp-hook.php(332): WP_Hook->apply_filters()
+#5 /var/www/bike.meihao.shopping/htdocs/wp-includes/plugin.php(517): WP_Hook->do_action()
+#6 /var/www/bike.meihao.shopping/htdocs/wp-content/plugins/category-ajax-filter-pro/includes/layouts/post/post-layout11.php(28): do_action()
+#7 /var/www/bike.meihao.shopping/htdocs/wp-content/plugins/cate 於 /var/www/bike.meihao.shopping/htdocs/wp-content/themes/astra-child/custom-function.php 在 109 線上
+

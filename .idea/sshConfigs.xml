@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig authType="PASSWORD" host="139.162.76.12" id="1e0efcae-c62c-41bd-98f3-aa53599e519d" port="22" customName="meihao-auto" nameFormat="CUSTOM" username="root">
+        <option name="customName" value="meihao-auto" />
+      </sshConfig>
+    </configs>
+  </component>
+</project>

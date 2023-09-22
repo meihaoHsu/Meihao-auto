@@ -1,0 +1,12 @@
+.elementor-107 .elementor-element.elementor-element-2ae3622:not(.elementor-motion-effects-element-type-background), .elementor-107 .elementor-element.elementor-element-2ae3622 > .elementor-motion-effects-container > .elementor-motion-effects-layer{background-color:transparent;background-image:linear-gradient(223deg, #3FECFE 55.79%, #36CD50 100%);}.elementor-107 .elementor-element.elementor-element-2ae3622, .elementor-107 .elementor-element.elementor-element-2ae3622 > .elementor-background-overlay{border-radius:30px 30px 30px 30px;}.elementor-107 .elementor-element.elementor-element-2ae3622{transition:background 0.3s, border 0.3s, border-radius 0.3s, box-shadow 0.3s;}.elementor-107 .elementor-element.elementor-element-2ae3622 > .elementor-background-overlay{transition:background 0.3s, border-radius 0.3s, opacity 0.3s;}.elementor-107 .elementor-element.elementor-element-e724dea{--spacer-size:5px;}.elementor-107 .elementor-element.elementor-element-9d5952a .elementor-heading-title{color:#FFFFFF;font-family:"Noto Sans TC", Sans-serif;font-size:30px;font-weight:600;}.elementor-107 .elementor-element.elementor-element-51e0f05 .elementor-heading-title{color:#FFFFFF;font-family:"Noto Sans TC", Sans-serif;font-size:21px;font-weight:700;}.elementor-107 .elementor-element.elementor-element-51e0f05 > .elementor-widget-container{margin:0px 25px 0px 25px;}.elementor-107 .elementor-element.elementor-element-9ffd71f{--divider-border-style:solid;--divider-color:#FFFFFF;--divider-border-width:2px;}.elementor-107 .elementor-element.elementor-element-9ffd71f .elementor-divider-separator{width:85%;margin:0 auto;margin-center:0;}.elementor-107 .elementor-element.elementor-element-9ffd71f .elementor-divider{text-align:center;padding-top:2px;padding-bottom:2px;}.elementor-107 .elementor-element.elementor-element-99997ca{color:#FFFFFF;font-family:"Noto Sans TC", Sans-serif;font-size:15px;font-weight:400;}.elementor-107 .elementor-element.elementor-element-99997ca > .elementor-widget-container{margin:0px 25px 25px 25px;}/* Start custom CSS for heading, class: .elementor-element-9d5952a */.bg3{
+    background-image: url('http://bike.meihao.shopping/wp-content/uploads/2023/08/dasdsa.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 125px;
+    margin-left: 25px;
+}
+.bg3 .elementor-widget-container{
+    position: absolute;
+    left: 52px;
+    top:40px;
+}/* End custom CSS */

@@ -1,0 +1,30 @@
+.elementor-344 .elementor-element.elementor-element-929028e > .elementor-container{min-height:95px;}.elementor-344 .elementor-element.elementor-element-929028e > .elementor-container > .elementor-column > .elementor-widget-wrap{align-content:center;align-items:center;}.elementor-344 .elementor-element.elementor-element-929028e:not(.elementor-motion-effects-element-type-background), .elementor-344 .elementor-element.elementor-element-929028e > .elementor-motion-effects-container > .elementor-motion-effects-layer{background-color:transparent;background-image:linear-gradient(90deg, #36CD50 0%, #A5E143 100%);}.elementor-344 .elementor-element.elementor-element-929028e{transition:background 0.3s, border 0.3s, border-radius 0.3s, box-shadow 0.3s;}.elementor-344 .elementor-element.elementor-element-929028e > .elementor-background-overlay{transition:background 0.3s, border-radius 0.3s, opacity 0.3s;}.elementor-344 .elementor-element.elementor-element-f47a656 .wpml-elementor-ls .wpml-ls-item{font-weight:700;}.elementor-344 .elementor-element.elementor-element-f47a656 .wpml-elementor-ls .wpml-ls-item .wpml-ls-link, 
+					.elementor-344 .elementor-element.elementor-element-f47a656 .wpml-elementor-ls .wpml-ls-legacy-dropdown a{color:#FFFFFF;}@media(max-width:767px){.elementor-344 .elementor-element.elementor-element-929028e > .elementor-container{min-height:60px;}.elementor-344 .elementor-element.elementor-element-f09c969{width:50%;}.elementor-344 .elementor-element.elementor-element-e9134e9{text-align:right;}.elementor-344 .elementor-element.elementor-element-e9134e9 img{width:94%;height:35px;object-fit:contain;}.elementor-344 .elementor-element.elementor-element-e9134e9 > .elementor-widget-container{margin:0px 0px 0px 0px;}.elementor-344 .elementor-element.elementor-element-74337f1{width:50%;}.elementor-344 .elementor-element.elementor-element-74337f1 > .elementor-element-populated{margin:10px 0px 0px 0px;--e-column-margin-right:0px;--e-column-margin-left:0px;}.elementor-344 .elementor-element.elementor-element-f47a656 .wpml-elementor-ls .wpml-ls-item{font-size:15px;}.elementor-344 .elementor-element.elementor-element-f47a656 > .elementor-widget-container{border-radius:0px 0px 0px 0px;}}/* Start custom CSS for wpml-language-switcher, class: .elementor-element-f47a656 */.wpml-ls-legacy-list-horizontal>ul {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   
+}
+.wpml-ls-item{
+    border-right: 2px solid #fff;
+    display: inline-block !important;
+    padding: 0px !important;
+    margin: 0px !important;
+}
+.wpml-ls-item:last-of-type{
+    border-right: 0px solid #fff !important;
+}
+.wpml-ls-link{
+    padding: 0px !important;
+    margin-right:  5px !important;
+    margin-left:  5px !important;
+}/* End custom CSS */
+/* Start custom CSS for section, class: .elementor-element-929028e */.header2{
+    border-bottom: 3px solid #03A84E;
+    position:fixed;
+    top:0px;
+    width: 100%;
+    z-index: 999;
+    
+    overflow-y: hidden;
+}/* End custom CSS */
