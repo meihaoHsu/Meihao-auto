@@ -25,12 +25,12 @@ $default_language = ['vi'=>'vi','id'=>'id_ID','zh-hant'=>'zh_TW','en'=>'en_US'];
     </select>
 </div>
 <div>
-    <label class="result">輸入內容</label>
-    <textarea id="inputText" name="inputText" placeholder="Text or send voice message..."></textarea>
+    <label class="result"><?php echo esc_html__('Input Text', 'Meihao-Translate-Chat'); ?></label>
+    <textarea id="inputText" name="inputText" placeholder="<?php echo esc_html__('Text or send voice message...', 'Meihao-Translate-Chat'); ?>"></textarea>
 </div>
 <div>
-    <label class="result">翻譯結果</label>
-    <textarea id="outputText" name="outputText" placeholder="Text or send voice message..."></textarea>
+    <label class="result"><?php echo esc_html__('Translate Result', 'Meihao-Translate-Chat'); ?></label>
+    <textarea id="outputText" name="outputText" placeholder="<?php echo esc_html__('Waiting for translate...', 'Meihao-Translate-Chat'); ?>"></textarea>
 
 </div>
 <div class="enter_btn">
@@ -38,7 +38,7 @@ $default_language = ['vi'=>'vi','id'=>'id_ID','zh-hant'=>'zh_TW','en'=>'en_US'];
 
     <div class="translate_log">
         <div id="translate-log-open-wrapper">
-            <button id="translate-log-open">最近對話內容</button>
+            <button id="translate-log-open"><?php echo esc_html__('Recent Conversation', 'Meihao-Translate-Chat'); ?></button>
         </div>
         <div id="lightbox">
           <div id="translate-log-wrapper" style="display: none;">
@@ -54,7 +54,7 @@ $default_language = ['vi'=>'vi','id'=>'id_ID','zh-hant'=>'zh_TW','en'=>'en_US'];
         
     </div>
 
-    <button id="translate-button">translation</button>
+    <button id="translate-button"><?php echo esc_html__('translation', 'Meihao-Translate-Chat'); ?></button>
 </div>
 
 

@@ -1,0 +1,23 @@
+#: frontend.php:28
+msgid "Input Text"
+msgstr ""
+
+#: frontend.php:30
+msgid "Translate Result"
+msgstr ""
+
+#: frontend.php:41
+msgid "Recent Conversation"
+msgstr ""
+
+#: frontend.php:57
+msgid "translation"
+msgstr ""
+
+#: frontend.php:29
+msgid "Text or send voice message..."
+msgstr ""
+
+#: frontend.php:33
+msgid "Waiting for translate..."
+msgstr ""

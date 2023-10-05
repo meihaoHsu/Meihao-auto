@@ -4,6 +4,8 @@
  * Description: Meihao Translate Chat
  * Version: 1.0.0
  * Author: Han Hsu
+ * Text Domain: Meihao-Translate-Chat
+ * Domain Path: /languages
  */
 ! defined( 'Meihao_TRANSLATE_CHAT_DIR' ) && define( 'Meihao_TRANSLATE_CHAT_DIR', plugin_dir_path( __FILE__ ) );
 ! defined( 'Meihao_TRANSLATE_CHAT_URL' ) && define( 'Meihao_TRANSLATE_CHAT_URL', plugin_dir_url( __FILE__ ) );
