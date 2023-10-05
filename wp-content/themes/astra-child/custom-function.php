@@ -93,8 +93,6 @@ class CustomFunction
 
 
         /** 客製化功能*/
-        add_action('woocommerce_after_checkout_billing_form',[$this,'add_person_count'],10);
-
         add_action( 'init', [$this, 'create_custom_post_type'], 0 );//新增文章類型-維修站點
         add_action('add_meta_boxes', [$this, 'add_meta_boxes' ] ,20); //維修站點-內容資料
         add_action('init', [$this,'customer_post_taxonomy'], 0 );//維修站點-自定義分類
