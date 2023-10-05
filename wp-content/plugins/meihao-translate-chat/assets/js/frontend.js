@@ -4,9 +4,9 @@ jQuery(document).ready(function($) {
     //     $('#translate-log-wrapper').toggle();
     // })
 
-    $('#translate-button').click(function() {
-        translateFunction();
-    });
+    // $('#translate-button').click(function() {
+    //     translateFunction();
+    // });
     $('#changeLanguage').click(function (){
         var inputLanguage = $('#inputLanguage').val();
         var outputLanguage = $('#outputLanguage').val();
@@ -26,17 +26,9 @@ jQuery(document).ready(function($) {
 
         //語音辨識結果顯示
         recognition.onresult = function(event) {
-            const results = event.results;
-            for (const result of results) {
-                //語音辨識準確度要求
-                if (result.confidence < 0.9) {
-                    results.splice(results.indexOf(result), 1);
-                }
-            }
+            const results = event.results[0];
             const transcript = results[0].transcript;
             $("#inputText").text(transcript);
-            translateFunction();
-
         };
 
         // 判斷用戶是否已講完話
@@ -47,6 +39,7 @@ jQuery(document).ready(function($) {
             $("#voice-input").addClass("btn-info", true);
             $("#voice-input").removeClass('recoding-button');
             $("#voice-input").addClass('voice-button');
+            translateFunction();
         };
 
         //點擊後觸發開始辨識
