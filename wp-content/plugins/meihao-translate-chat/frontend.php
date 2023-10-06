@@ -24,37 +24,39 @@ $default_language = ['vi'=>'vi','id'=>'id_ID','zh-hant'=>'zh_TW','en'=>'en_US'];
         <?php endforeach;?>
     </select>
 </div>
-<div>
-    <label class="result"><?php echo esc_html__('Input Text', 'Meihao-Translate-Chat'); ?></label>
-    <textarea id="inputText" name="inputText" placeholder="<?php echo esc_html__('Text or send voice message...', 'Meihao-Translate-Chat'); ?>"></textarea>
-</div>
-<div>
-    <label class="result"><?php echo esc_html__('Translate Result', 'Meihao-Translate-Chat'); ?></label>
-    <textarea id="outputText" name="outputText" placeholder="<?php echo esc_html__('Waiting for translate...', 'Meihao-Translate-Chat'); ?>"></textarea>
-
-</div>
 <div class="enter_btn">
-    <button id="voice-input" class="voice-button"></button>
+    <button id="voice-input" class="btn-info voice-button"></button>
 
     <div class="translate_log">
         <div id="translate-log-open-wrapper">
-            <button id="translate-log-open"><?php echo esc_html__('Recent Conversation', 'Meihao-Translate-Chat'); ?></button>
+            <!--            <button id="translate-log-open">--><?php //echo esc_html__('Recent Conversation', 'Meihao-Translate-Chat'); ?><!--</button>-->
+            <button id="translate-log-open"><img class="recent-img" src="<?= plugin_dir_url( __FILE__ ) . 'image/recent-icon.png'; ?>"></button>
         </div>
         <div id="lightbox">
-          <div id="translate-log-wrapper" style="display: none;">
-            <div id="translate-log-detail">
-                <?php foreach($translate_logs as $key => $translate_log):?>
-                    <p class="translate-log" >
-                        <?=$translate_log?>
-                    </p>
-                <?php endforeach;?>
+            <div id="translate-log-wrapper" style="display: none;">
+                <div id="translate-log-detail">
+                    <?php foreach($translate_logs as $key => $translate_log):?>
+                        <p class="translate-log" >
+                            <?=$translate_log?>
+                        </p>
+                    <?php endforeach;?>
+                </div>
             </div>
         </div>
-    </div>
-        
+
     </div>
 
     <button id="translate-button"><?php echo esc_html__('translation', 'Meihao-Translate-Chat'); ?></button>
+</div>
+<div>
+    <div>
+        <label class="result"><?php echo esc_html__('Input Text', 'Meihao-Translate-Chat'); ?></label>
+        <textarea id="inputText" name="inputText" placeholder="<?php echo esc_html__('Text or send voice message...', 'Meihao-Translate-Chat'); ?>"></textarea>
+    </div>
+    <div>
+        <label class="result"><?php echo esc_html__('Translate Result', 'Meihao-Translate-Chat'); ?></label>
+        <textarea id="outputText" name="outputText" placeholder="<?php echo esc_html__('Waiting for translate...', 'Meihao-Translate-Chat'); ?>"></textarea>
+    </div>
 </div>
 
 

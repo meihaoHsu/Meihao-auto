@@ -28,7 +28,7 @@
 #inputText{
     background-color: #EFB57D;
     border-radius: 30px;
-    min-height: 150px;
+    min-height: 100px;
 
 }
 .result{
@@ -42,7 +42,7 @@
 #outputText{
     background-color: #D9D9D9;
     border-radius: 30px;
-    min-height: 150px;
+    min-height: 100px;
 }
 .enter_btn{
     display: flex;
@@ -139,8 +139,8 @@
     background-image: url("https://bike.meihao.shopping/wp-content/plugins/meihao-translate-chat/image/Frame-18548.png");
     background-repeat: no-repeat;
     background-position: center;
-    height:100px;
-    padding: 10px 0;
+    height:70px;
+    padding: 5px 0;
 }
 .recoding-button{
     background-image:unset;
@@ -166,4 +166,8 @@
     90%{
         box-shadow: 0px 0px 5px 13px rgba(173,0,0,0);
     }
+}
+
+.recent-img{
+    width:20px;
 }
