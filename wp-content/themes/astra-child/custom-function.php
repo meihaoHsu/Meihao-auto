@@ -152,19 +152,19 @@ class CustomFunction
     }
     public function customer_post_taxonomy(){
         register_taxonomy( 'brand', ['repair','product'], array(
-            'label' => '品牌', 'hierarchical' => true,'show_admin_column' => true,
+            'label' => __('Brands','astraChild'), 'hierarchical' => true,'show_admin_column' => true,
             'show_in_nav_menus' => true,
         ));
         register_taxonomy( 'model', 'product', array(
-            'label' => '車種類型', 'hierarchical' => true,'show_admin_column' => true,
+            'label' => __('Car Type','astraChild'), 'hierarchical' => true,'show_admin_column' => true,
             'show_in_nav_menus' => true,
         ));
         register_taxonomy( 'repair-cat', 'repair', array(
-            'label' => '功能分類', 'hierarchical' => true,'show_admin_column' => true,
+            'label' => __('Services','astraChild'), 'hierarchical' => true,'show_admin_column' => true,
             'show_in_nav_menus' => true,
         ));
         register_taxonomy( 'city', 'repair', array(
-            'label' => '城市', 'hierarchical' => true,'show_admin_column' => true,
+            'label' => __('City','astraChild'), 'hierarchical' => true,'show_admin_column' => true,
             'show_in_nav_menus' => true,
         ));
     }
