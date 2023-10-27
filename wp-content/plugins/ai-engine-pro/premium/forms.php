@@ -263,8 +263,18 @@ class MeowPro_MWAI_Forms {
 
   function shortcode_mwai_form_submit( $atts ) {
     $formId = 'mwai-' . uniqid();
+    $atts = apply_filters( 'mwai_form_params', $atts );
 
-    $atts = apply_filters( 'mwai_forms_submit_params', $atts );
+    // Check if the old filter is used
+    $originalAtts = $atts;
+    $atts = apply_filters( 'mwai_forms_params', $atts );
+    if ( $originalAtts !== $atts ) {
+      trigger_error( 
+        'The mwai_forms_params filter is deprecated. Please use mwai_form_params instead.', 
+        E_USER_DEPRECATE
+      );
+    }
+    
     $atts = $this->keysToCamelCase( $atts );
     $frontParams = $this->fetchFrontParams( $atts );
     $systemParams = $this->fetchSystemParams( $formId, $formId ); // Overridable by $atts later
@@ -307,16 +317,8 @@ class MeowPro_MWAI_Forms {
     </div>";
   }
 
-  // function shortcode_mwai_form_output( $atts ) {
-  //   $id = empty( $atts['id'] ) ? ( 'mwai-' . uniqid() ) : $atts['id'];
-  //   $class = empty( $atts['class'] ) ? 'mwai-form-output' : 'mwai-form-output ' . $atts['class'];
-  //   $html = '<div class="mwai-form-output-container" id="' . $id . '">';
-  //   $html .= '</div>';
-  //   return $html;
-  // }
-
   function shortcode_mwai_form_output( $atts ) {
-    $atts = apply_filters( 'mwai_forms_output_params', $atts );
+    //$atts = apply_filters( 'mwai_forms_output_params', $atts );
     $atts = $this->keysToCamelCase( $atts );
     $frontParams = $this->fetchFrontParams( $atts );
 

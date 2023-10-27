@@ -1,7 +1,5 @@
 <?php
 
-const MWAI_DEFAULT_NAMESPACE = 'mwai';
-
 class MeowPro_MWAI_Embeddings {
   private $core = null;
   private $wpdb = null;
@@ -9,7 +7,7 @@ class MeowPro_MWAI_Embeddings {
   private $table_vectors = null;
   private $namespace = 'mwai/v1/';
   private $defaultIndex = null;
-  private $defaultNamespace = MWAI_DEFAULT_NAMESPACE;
+  private $defaultNamespace = null;
   private $options = [];
   private $settings = [];
   private $syncPosts = false;
@@ -21,9 +19,9 @@ class MeowPro_MWAI_Embeddings {
     $this->wpdb = $wpdb;
     $this->options = $this->core->get_option( 'pinecone' );
     $this->defaultIndex = $this->options['index'];
-    if ( $this->options['namespaces'] ) {
-      $this->defaultNamespace = $this->options['namespaces'][0];
-    }
+    // if ( $this->options['namespaces'] ) {
+    //   $this->defaultNamespace = $this->options['namespaces'][0];
+    // }
     $this->table_vectors = $wpdb->prefix . 'mwai_vectors';
     $this->settings = $this->core->get_option( 'embeddings' );
     $this->syncPosts = isset( $this->settings['syncPosts'] ) ? $this->settings['syncPosts'] : false;
@@ -156,7 +154,8 @@ class MeowPro_MWAI_Embeddings {
 		try {
 			$params = $request->get_json_params();
 			$localIds = $params['ids'];
-      $success = $this->vectors_delete( $localIds );
+      $force = isset( $params['force'] ) ? $params['force'] : false;
+      $success = $this->vectors_delete( $localIds, $force );
 			return new WP_REST_Response([ 'success' => $success ], 200 );
 		}
 		catch ( Exception $e ) {
@@ -331,28 +330,60 @@ class MeowPro_MWAI_Embeddings {
     return $vectors;
   }
 
-  function vectors_delete( $localIds ) {
-    if ( !$this->checkDB() ) { return false; }
-
-    $dbNamespaces = [];
-    foreach ( $localIds as $id ) {
-      $vector = $this->getVector( $id );
-      if ( empty( $vector ) ) { continue; }
-      // Delete local vectors
-      $this->wpdb->delete( $this->table_vectors, [ 'id' => $id ], [ '%d' ] );
-      // Gather the vectors per namespaces
-      $ns = $vector['dbNS'];
-      if ( !isset( $dbNamespaces[ $ns ] ) ) {
-        $dbNamespaces[ $ns ] = [];
-      }
-      $dbNamespaces[ $ns ][] = $vector['dbId'];
+  function vectors_delete($localIds, $force = false)
+  {
+    if (!$this->checkDB()) {
+      return false;
     }
-    // Delete remote vectors
-    foreach ( $dbNamespaces as $ns => $dbIds ) {
-      apply_filters( 'mwai_embeddings_delete_vectors', [], $dbIds, false, $ns );
+
+    // Step 1: Gather the vectors and sort them per namespaces without deleting locally.
+    $dbNamespaces = [];
+    foreach ($localIds as $id) {
+      $vector = $this->getVector($id);
+      if (empty($vector)) {
+        continue;
+      }
+      $ns = $vector['dbNS'];
+      if (!isset($dbNamespaces[$ns])) {
+        $dbNamespaces[$ns] = [];
+      }
+      $dbNamespaces[$ns][] = ['localId' => $id, 'dbId' => $vector['dbId']];
+    }
+
+    // Step 2: Try to delete the vectors remotely.
+    foreach ($dbNamespaces as $ns => $vectorMappings) {
+      $dbIds = array_map(function ($mapping) {
+        return $mapping['dbId'];
+      }, $vectorMappings);
+
+      // Filtering out null values.
+      $dbIds = array_filter($dbIds, function ($dbId) {
+        return !is_null($dbId);
+      });
+
+      // Only apply filters if $dbIds isn't empty.
+      if ( !empty( $dbIds ) ) {
+        try {
+          apply_filters( 'mwai_embeddings_delete_vectors', [], $dbIds, false, $ns );
+        }
+        catch ( Exception $e ) {
+          if ( $force ) {
+            error_log( $e->getMessage() );
+          }
+          else {
+            throw $e;
+          }
+        }
+      }
+
+      // Step 3: If remote deletion is successful (or if there were no remote vectors to delete), delete locally.
+      foreach ($vectorMappings as $mapping) {
+        $this->wpdb->delete($this->table_vectors, ['id' => $mapping['localId']], ['%d']);
+      }
     }
     return true;
   }
+
 
   // function vectors_delete_all( $success, $index, $syncPineCone = true ) {
   //   if ( $success ) { return $success; }
@@ -403,15 +434,22 @@ class MeowPro_MWAI_Embeddings {
     $queryEmbed->setEnv('admin-tools');
     $reply = $this->core->ai->run( $queryEmbed );
     $vector['embedding'] = $reply->result;
-    $dbId = apply_filters( 'mwai_embeddings_add_vector', false, $vector );
-    if ( $dbId ) {
-      $this->wpdb->update( $this->table_vectors, [ 'dbId' => $dbId, 'status' => "ok" ],
-        [ 'id' => $vector['id'] ], array( '%s' ), [ '%d' ]
-      );
-    }
-    else {
-      $this->wpdb->update( $this->table_vectors, [ 'dbId' => null, 'status' => "error" ],
-        [ 'id' => $vector['id'] ], array( '%s' ), [ '%d' ]
+    try {
+      $dbId = apply_filters( 'mwai_embeddings_add_vector', false, $vector );
+      if ( $dbId ) {
+        $this->wpdb->update( $this->table_vectors, [ 'dbId' => $dbId, 'status' => "ok" ],
+          [ 'id' => $vector['id'] ], array( '%s', '%s' ), [ '%d' ]
+        );
+      }
+      else {
+        throw new Exception( "Could not add the vector to the Vector DB (no \$dbId)." );
+      }
+    } 
+    catch ( Exception $e ) {
+      $error = $e->getMessage();
+      error_log( $error );
+      $this->wpdb->update( $this->table_vectors, [ 'dbId' => null, 'status' => "error", 'error' => $error ],
+        [ 'id' => $vector['id'] ], array( '%s', '%s', '%s' ), [ '%d' ]
       );
     }
     return true;
@@ -442,42 +480,53 @@ class MeowPro_MWAI_Embeddings {
     if ( !$originalVector ) { throw new Exception( "Vector not found" ); }
     $newContent = $originalVector['content'] !== $vector['content'];
     $dbNS = !empty( $vector['dbNS'] ) ? $vector['dbNS'] : $this->defaultNamespace;
+    $wasError = $originalVector['status'] === 'error';
 
-    // Update the vector
-    $this->wpdb->update( $this->table_vectors, [
-        'type' => $vector['type'],
-        'title' => $vector['title'],
-        'content' => $vector['content'],
-        'refId' => !empty( $vector['refId'] ) ? $vector['refId'] : null,
-        'refChecksum' => !empty( $vector['refChecksum'] ) ? $vector['refChecksum'] : null,
-        'dbIndex' => $vector['dbIndex'],
-        'status' => $newContent ? "processing" : "ok",
-        'updated' => date( 'Y-m-d H:i:s' )
-      ],
-      [ 'id' => $vector['id'] ],
-      [ '%s', '%s', '%s', '%s', '%s' ],
-      [ '%d' ]
-    );
+    if ( $newContent || $wasError ) {
 
-    if ( $originalVector['content'] !== $vector['content'] ) {
-      // Delete the original vector
-      apply_filters( 'mwai_embeddings_delete_vectors', [], $originalVector['dbId'], false, $dbNS );
-      // Create embedding
-      $queryEmbed = new Meow_MWAI_Query_Embed( $vector['content'] );
-      $queryEmbed->setEnv('admin-tools');
-      $reply = $this->core->ai->run( $queryEmbed );
-      $vector['embedding'] = $reply->result;
-      $dbId = apply_filters( 'mwai_embeddings_add_vector', false, $vector, $dbNS );
-      if ( $dbId ) {
-        $this->wpdb->update( $this->table_vectors,
-          [ 'dbId' => $dbId, 'status' => "ok", 'updated' => date( 'Y-m-d H:i:s' ) ],
-          [ 'id' => $vector['id'] ], [ '%s', '%s' ], [ '%d' ]
-        );
+      // Update the vector (to mark it as processing)
+      $this->wpdb->update( $this->table_vectors, [
+          'type' => $vector['type'],
+          'title' => $vector['title'],
+          'content' => $vector['content'],
+          'refId' => !empty( $vector['refId'] ) ? $vector['refId'] : null,
+          'refChecksum' => !empty( $vector['refChecksum'] ) ? $vector['refChecksum'] : null,
+          'dbIndex' => $vector['dbIndex'],
+          // Not sure why I could set it to "ok" before (it was outside the condition), let's see.
+          'status' => ( $newContent || $wasError ) ? "processing" : "ok",
+          'updated' => date( 'Y-m-d H:i:s' )
+        ],
+        [ 'id' => $vector['id'] ],
+        [ '%s', '%s', '%s', '%s', '%s' ],
+        [ '%d' ]
+      );
+
+      try {
+        // Delete the original vector
+        apply_filters( 'mwai_embeddings_delete_vectors', [], $originalVector['dbId'], false, $dbNS );
+        // Create the embedding
+        $queryEmbed = new Meow_MWAI_Query_Embed( $vector['content'] );
+        $queryEmbed->setEnv('admin-tools');
+        $reply = $this->core->ai->run( $queryEmbed );
+        $vector['embedding'] = $reply->result;
+        // Re-add the vector
+        $dbId = apply_filters( 'mwai_embeddings_add_vector', false, $vector, $dbNS );
+        if ( $dbId ) {
+          $this->wpdb->update( $this->table_vectors,
+            [ 'dbId' => $dbId, 'status' => "ok", 'updated' => date( 'Y-m-d H:i:s' ) ],
+            [ 'id' => $vector['id'] ], [ '%s', '%s' ], [ '%d' ]
+          );
+        }
+        else {
+          throw new Exception( "Could not update the vector to the Vector DB (no \$dbId)." );
+        }
       }
-      else {
+      catch ( Exception $e ) {
+        $error = $e->getMessage();
+        error_log( $error );
         $this->wpdb->update( $this->table_vectors,
-          [ 'dbId' => null, 'status' => "error", 'updated' => date( 'Y-m-d H:i:s' ) ],
-          [ 'id' => $vector['id'] ], [ '%s', '%s' ], [ '%d' ]
+          [ 'dbId' => null, 'status' => "error", 'error' => $error, 'updated' => date( 'Y-m-d H:i:s' ) ],
+          [ 'id' => $vector['id'] ], [ '%s', '%s', '%s' ], [ '%d' ]
         );
       }
     }
@@ -521,7 +570,7 @@ class MeowPro_MWAI_Embeddings {
 
     $filters = !empty( $filters ) ? $filters : [];
     $dbIndex = !empty( $filters['dbIndex'] ) ? $filters['dbIndex'] : $this->defaultIndex;
-    $dbNS = !empty( $filters['dbNS'] ) ? $filters['dbNS'] : $this->defaultNamespace;
+    $dbNS = !empty( $filters['dbNS'] ) ? $filters['dbNS'] : null;
 
     // Is AI Search
     $isAiSearch = !empty( $filters['search'] );
@@ -551,8 +600,13 @@ class MeowPro_MWAI_Embeddings {
     if ( isset( $filters['dbIndex'] ) ) {
       $where[] = "dbIndex = '" . esc_sql( $filters['dbIndex'] ) . "'";
     }
-    if ( isset( $filters['dbNS'] ) ) {
-      $where[] = "dbNS = '" . esc_sql( $filters['dbNS'] ) . "'";
+    if ( array_key_exists( 'dbNS', $filters ) ) {
+      if ( $filters['dbNS'] === null ) {
+        $where[] = "dbNS IS NULL";
+      }
+      else {
+        $where[] = "dbNS = '" . esc_sql( $filters['dbNS'] ) . "'";
+      }
     }
     // $dbIds is an array of strings
     $dbIds = [];
@@ -643,9 +697,10 @@ class MeowPro_MWAI_Embeddings {
       status VARCHAR(32) NULL,
       dbId VARCHAR(64) NULL,
       dbIndex VARCHAR(64) NOT NULL,
-      dbNS VARCHAR(64) NOT NULL,
+      dbNS VARCHAR(64) NULL,
       refId BIGINT(20) NULL,
       refChecksum VARCHAR(64) NULL,
+      error TEXT NULL,
       created DATETIME NOT NULL,
       updated DATETIME NOT NULL,
       PRIMARY KEY  (id)
@@ -654,26 +709,42 @@ class MeowPro_MWAI_Embeddings {
     dbDelta( $sqlVectors );
   }
 
-  function checkDB() {
-    if ( $this->db_check ) {
+  function checkDB()
+  {
+    if ($this->db_check) {
       return true;
     }
-    $this->db_check = !( strtolower( 
-      $this->wpdb->get_var( "SHOW TABLES LIKE '$this->table_vectors'" ) ) != strtolower( $this->table_vectors )
-    );
-    if ( !$this->db_check ) {
+    $tableExists = !(strtolower($this->wpdb->get_var("SHOW TABLES LIKE '$this->table_vectors'")) != strtolower($this->table_vectors));
+    if (!$tableExists) {
       $this->create_db();
-      $this->db_check = !( strtolower( 
-        $this->wpdb->get_var( "SHOW TABLES LIKE '$this->table_vectors'" ) ) != strtolower( $this->table_vectors )
-      );
+      $tableExists = !(strtolower($this->wpdb->get_var("SHOW TABLES LIKE '$this->table_vectors'")) != strtolower($this->table_vectors));
     }
+    $this->db_check = $tableExists;
 
     // LATER: REMOVE THIS AFTER OCTOBER 2023
     // Make sure the column "dbId" exists in the $this->table_vectors table
-    $this->db_check = $this->db_check && $this->wpdb->get_var( "SHOW COLUMNS FROM $this->table_vectors LIKE 'dbId'" );
-    if ( !$this->db_check ) {
-      $this->wpdb->query( "ALTER TABLE $this->table_vectors ADD COLUMN dbId VARCHAR(64) NULL" );
-      $this->wpdb->query( "UPDATE $this->table_vectors SET dbId = id" );
+    if ($tableExists && !$this->wpdb->get_var("SHOW COLUMNS FROM $this->table_vectors LIKE 'dbId'")) {
+      $this->wpdb->query("ALTER TABLE $this->table_vectors ADD COLUMN dbId VARCHAR(64) NULL");
+      $this->wpdb->query("UPDATE $this->table_vectors SET dbId = id");
+      $this->db_check = false;
+    }
+
+    // LATER: REMOVE THIS AFTER FEBRUARY 2024
+    // Check if the column "error" exists in the $this->table_vectors table
+    // At the same time, I took the decision to use the namespace NULL when there is no namespace.
+    if ($tableExists && !$this->wpdb->get_var("SHOW COLUMNS FROM $this->table_vectors LIKE 'error'")) {
+      $this->wpdb->query("ALTER TABLE $this->table_vectors ADD COLUMN error TEXT NULL");
+      $this->wpdb->query("ALTER TABLE $this->table_vectors MODIFY dbNS varchar(64) NULL");
+      $this->wpdb->update( $this->table_vectors, [
+          'dbNS' => null,
+          'updated' => date( 'Y-m-d H:i:s' )
+        ],
+        [ 'dbIndex' => 'starter' ],
+        [ '%s', '%s' ],
+        [ '%s' ]
+      );
+
+      $this->db_check = true;
     }
 
     return $this->db_check;

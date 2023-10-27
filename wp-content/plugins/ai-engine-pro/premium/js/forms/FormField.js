@@ -1,12 +1,12 @@
 const FormField = (props) => {
   // eslint-disable-next-line no-unused-vars
   const { system, params, theme } = props;
-  const { id, label, type, name, options, required = 'yes', placeholder,
+  const { id, label, type, name, options, required, placeholder,
     default: defaultValue, maxlength, rows, className } = params;
   const parsedOptions = options ? JSON.parse(decodeURIComponent(options)) : null;
   const baseClass = 'mwai-form-field mwai-form-field-' + type;
   const classStr = `${baseClass}${className ? ' ' + className : ''}`;
-  const isRequired = required === 'yes';
+  const isRequired = required === true;
 
   switch (type) {
   case 'select':
@@ -15,7 +15,7 @@ const FormField = (props) => {
         data-form-type='select' data-form-required={isRequired}>
         <legend>{label}</legend>
         <div className="mwai-form-field-container">
-          <select name={name} required={required === 'yes'}>
+          <select name={name} required={required === 'yes'} data-form-required={isRequired}>
             {parsedOptions && parsedOptions.map(option => (
               <option key={option.value} value={option.value}>{option.label}</option>
             ))}
@@ -30,7 +30,7 @@ const FormField = (props) => {
         <legend>{label}</legend>
         {parsedOptions && parsedOptions.map(option => (
           <div className="mwai-form-field-container" key={option.value}>
-            <input type="radio" name={name} value={option.value} required={required === 'yes'} />
+            <input type="radio" name={name} value={option.value} required={required === 'yes'} data-form-required={isRequired} />
             <label>{option.label}</label>
           </div>
         ))}
@@ -43,7 +43,7 @@ const FormField = (props) => {
         <legend>{label}</legend>
         {parsedOptions && parsedOptions.map(option => (
           <div className="mwai-form-field-container" key={option.value}>
-            <input id={id} type="checkbox" name={name} value={option.value} required={required === 'yes'} />
+            <input id={id} type="checkbox" name={name} value={option.value} required={required === 'yes'} data-form-required={isRequired} />
             <label>{option.label}</label>
           </div>
         ))}
@@ -55,7 +55,8 @@ const FormField = (props) => {
         data-form-type='textarea'  data-form-required={isRequired}>
         <legend>{label}</legend>
         <div className="mwai-form-field-container">
-          <textarea id={id} name={name} placeholder={placeholder} maxLength={maxlength} rows={rows} required={required === 'yes'} defaultValue={defaultValue} />
+          <textarea id={id} name={name} placeholder={placeholder} maxLength={maxlength} rows={rows}
+            required={required === 'yes'}  data-form-required={isRequired} defaultValue={defaultValue} />
         </div>
       </fieldset>
     );
@@ -65,7 +66,8 @@ const FormField = (props) => {
         data-form-type='input'  data-form-required={isRequired}>
         <legend>{label}</legend>
         <div className="mwai-form-field-container">
-          <input id={id} type="text" name={name} placeholder={placeholder} maxLength={maxlength} defaultValue={defaultValue} required={required === 'yes'} />
+          <input id={id} type="text" name={name} placeholder={placeholder} maxLength={maxlength}
+            data-form-required={isRequired} defaultValue={defaultValue} required={required === 'yes'} />
         </div>
       </fieldset>
     );

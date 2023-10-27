@@ -6,7 +6,7 @@ class MeowPro_MWAI_Addons_Pinecone {
   private $server = null;
   private $host = null;
   private $defaultIndex = null;
-  private $defaultNS = null;
+  private $supportNS = true;
   private $options = [];
 
   function __construct() {
@@ -16,8 +16,7 @@ class MeowPro_MWAI_Addons_Pinecone {
     $this->server = $this->options['server'];
     $this->apiKey = $this->options['apikey'];
     $this->defaultIndex = $this->options['index'];
-    $this->defaultNS = isset( $this->options['namespace'] ) ?
-      $this->options['namespace'] : MWAI_DEFAULT_NAMESPACE;
+    $this->supportNS = $this->server !== 'gcp-starter';
     $this->host = $this->pinecone_get_host( $this->defaultIndex );
 
     add_filter( 'mwai_embeddings_add_index', array( $this, 'add_index' ), 10, 3 );
@@ -45,6 +44,7 @@ class MeowPro_MWAI_Addons_Pinecone {
     return $host;
   }
 
+  // Generic function to run a request to Pinecone.
   function run( $method, $url, $query = null, $json = true, $isAbsoluteUrl = false )
   {
     $headers = "accept: application/json, charset=utf-8\r\ncontent-type: application/json\r\n" . 
@@ -78,6 +78,7 @@ class MeowPro_MWAI_Addons_Pinecone {
     return [];
   }
 
+  // Add a new index to Pinecone.
   function add_index( $index, $name, $params ) {
     $podType = $params['podType'];
     $dimension = 1536;
@@ -91,12 +92,14 @@ class MeowPro_MWAI_Addons_Pinecone {
     return $index;
   }
 
+  // Delete an index from Pinecone.
   function delete_index( $success, $name ) {
     $index = $this->run( 'DELETE', "/databases/{$name}", null, true );
     $success = !empty( $index );
     return $success;
   }
 
+  // List all indexes from Pinecone.
   function list_indexes( $indexes ) {
     $indexesIds = $this->run( 'GET', '/databases', null, true );
     $indexes = [];
@@ -113,22 +116,26 @@ class MeowPro_MWAI_Addons_Pinecone {
     return $indexes;
   }
 
-  function delete_vectors( $results, $ids, $deleteAll = false, $namespace = null ) {
-    if ( empty( $namespace ) ) {
-      $namespace = $this->defaultNS;
-    }
-    $results = $this->run( 'POST', "https://{$this->host}/vectors/delete", [
+  // Delete vectors from Pinecone.
+  function delete_vectors( $success, $ids, $deleteAll = false, $namespace = null ) {
+    $body = [
       'ids' => $deleteAll ? null : $ids,
-      'deleteAll' => $deleteAll,
-      'namespace' => $namespace
-    ], true, true );
-    return $results;
+      'deleteAll' => $deleteAll
+    ];
+    if ( $this->supportNS ) {
+      $body['namespace'] = $namespace;
+    }
+    // If delete fails, an exception will be thrown. Otherwise, it's successful.
+    $success = $this->run( 'POST', "https://{$this->host}/vectors/delete", $body, true, true );
+    $success = true;
+    return $success;
   }
 
+  // Add a vector to Pinecone.
   function add_vector( $success, $vector ) {
-    $dbNS = isset( $vector['dbNS'] ) ? $vector['dbNS'] : $this->defaultNS;
+    $dbNS = isset( $vector['dbNS'] ) ? $vector['dbNS'] : null;
     $randomId = bin2hex( random_bytes( 32 ) );
-    $res = $this->run( 'POST', "https://{$this->host}/vectors/upsert", [
+    $body = [
       'vectors' => [
         'id' => $randomId,
         'values' => $vector['embedding'],
@@ -136,39 +143,41 @@ class MeowPro_MWAI_Addons_Pinecone {
           'type' => $vector['type'],
           'title' => $vector['title']
         ]
-      ],
-      'namespace' => $dbNS
-    ], true, true );
+      ]
+    ];
+    if ( $this->supportNS && !empty( $dbNS ) ) {
+      $body['namespace'] = $dbNS;
+    }
+    $res = $this->run( 'POST', "https://{$this->host}/vectors/upsert", $body, true, true );
     $success = isset( $res['upsertedCount'] ) && $res['upsertedCount'] > 0;
     if ( $success ) {
       return $randomId;
     }
-    return false;
+    $error = isset( $res['message'] ) ? $res['message'] : 'Unknown error from Pinecone.';
+    throw new Exception( $error );
   }
 
+  // Query vectors from Pinecone.
   function query_vectors( $vectors, $vector, $indexName = null, $namespace = null ) {
-    if ( empty( $namespace ) ) {
-      $namespace = $this->defaultNS;
-    }
     $indexName = !empty( $indexName ) ? $indexName : $this->defaultIndex;
     $host = $this->pinecone_get_host( $indexName );
-    $res = $this->run( 'POST', "https://{$host}/query", [
+    $body = [
       'topK' => 10,
       'vector' => $vector,
-      'namespace' => $namespace
-    ], true, true );
+    ];
+    if ( $this->supportNS ) {
+      $body['namespace'] = $namespace;
+    }
+    $res = $this->run( 'POST', "https://{$host}/query", $body, true, true );
     $vectors = isset( $res['matches'] ) ? $res['matches'] : [];
     return $vectors;
   }
 
-  // Namespace is useless in the case of Pinecone.
+  // Get a vector from Pinecone.
   function get_vector( $vector, $vectorId, $indexName = null, $namespace = null ) {
     // Check if the filter has been already handled.
     if ( !empty( $vector ) ) { return $vector; }
     $vectorId = (int)$vectorId;
-    if ( empty( $namespace ) ) {
-      $namespace = $this->defaultNS;
-    }
     $indexName = !empty( $indexName ) ? $indexName : $this->defaultIndex;
     $host = $this->pinecone_get_host( $indexName );
     $url = "https://{$host}/vectors/fetch?ids={$vectorId}&namespace={$namespace}";

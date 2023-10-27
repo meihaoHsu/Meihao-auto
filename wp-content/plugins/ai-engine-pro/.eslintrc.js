@@ -25,6 +25,8 @@ module.exports = {
     "mwl": true,
     "Event": true,
     "google": true,
+    "FileReader": true,
+    "confirm": true,
   },
   "rules": {
     "no-console": [1, { allow: ["warn", "error"] }],

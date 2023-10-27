@@ -182,7 +182,18 @@ class MeowPro_MWAI_Forms_Old {
     $apiUrl = get_rest_url( null, $this->namespace . '/forms/submit' );
 
     // Forms System Parameters
+    $atts = apply_filters( 'mwai_form_params', $atts );
+
+    // Check if the old filter is used
+    $originalAtts = $atts;
     $atts = apply_filters( 'mwai_forms_params', $atts );
+    if ( $originalAtts !== $atts ) {
+      trigger_error( 
+        'The mwai_forms_params filter is deprecated. Please use mwai_form_params instead.', 
+        E_USER_DEPRECATE
+      );
+    }
+
     $env = empty( $atts['env'] ) ? 'form' : $atts['env'];
     $sessionId = $this->core->get_session_id();
     $rest_nonce = $this->core->get_nonce();
