@@ -15,184 +15,194 @@ class Meow_MWAI_Rest
 			// Settings Endpoints
 			register_rest_route( $this->namespace, '/settings/update', array(
 				'methods' => 'POST',
-				'permission_callback' => array( $this->core, 'can_access_settings' ),
-				'callback' => array( $this, 'rest_settings_update' )
+				'permission_callback' => [ $this->core, 'can_access_settings' ],
+				'callback' => [ $this, 'rest_settings_update' ],
 			) );
 			register_rest_route( $this->namespace, '/settings/list', array(
 				'methods' => 'GET',
-				'permission_callback' => array( $this->core, 'can_access_settings' ),
-				'callback' => array( $this, 'rest_settings_list' ),
+				'permission_callback' => [ $this->core, 'can_access_settings' ],
+				'callback' => [ $this, 'rest_settings_list' ],
 			) );
 			register_rest_route( $this->namespace, '/settings/reset', array(
 				'methods' => 'POST',
-				'permission_callback' => array( $this->core, 'can_access_settings' ),
-				'callback' => array( $this, 'rest_settings_reset' ),
+				'permission_callback' => [ $this->core, 'can_access_settings' ],
+				'callback' => [ $this, 'rest_settings_reset' ],
 			) );
 			register_rest_route( $this->namespace, '/settings/chatbots', array(
 				'methods' => ['GET', 'POST'],
-				'permission_callback' => array( $this->core, 'can_access_settings' ),
-				'callback' => array( $this, 'rest_settings_chatbots' ),
+				'permission_callback' => [ $this->core, 'can_access_settings' ],
+				'callback' => [ $this, 'rest_settings_chatbots' ],
 			) );
 			register_rest_route( $this->namespace, '/settings/themes', array(
 				'methods' => ['GET', 'POST'],
-				'permission_callback' => array( $this->core, 'can_access_settings' ),
-				'callback' => array( $this, 'rest_settings_themes' ),
+				'permission_callback' => [ $this->core, 'can_access_settings' ],
+				'callback' => [ $this, 'rest_settings_themes' ],
 			) );
 
 			// System Endpoints
 			register_rest_route( $this->namespace, '/system/logs/list', array(
 				'methods' => 'POST',
-				'permission_callback' => array( $this->core, 'can_access_settings' ),
-				'callback' => array( $this, 'rest_system_logs_list' ),
+				'permission_callback' => [ $this->core, 'can_access_settings' ],
+				'callback' => [ $this, 'rest_system_logs_list' ],
 			) );
 			register_rest_route( $this->namespace, '/system/logs/delete', array(
 				'methods' => 'POST',
-				'permission_callback' => array( $this->core, 'can_access_settings' ),
-				'callback' => array( $this, 'rest_system_logs_delete' ),
+				'permission_callback' => [ $this->core, 'can_access_settings' ],
+				'callback' => [ $this, 'rest_system_logs_delete' ],
 			) );
 			register_rest_route( $this->namespace, '/system/logs/meta', array(
 				'methods' => 'POST',
-				'permission_callback' => array( $this->core, 'can_access_settings' ),
-				'callback' => array( $this, 'rest_system_logs_meta_get' ),
+				'permission_callback' => [ $this->core, 'can_access_settings' ],
+				'callback' => [ $this, 'rest_system_logs_meta_get' ],
 			) );
 			register_rest_route( $this->namespace, '/system/templates', array(
 				'methods' => 'POST',
-				'permission_callback' => array( $this->core, 'can_access_features' ),
-				'callback' => array( $this, 'rest_system_templates_save' ),
+				'permission_callback' => [ $this->core, 'can_access_features' ],
+				'callback' => [ $this, 'rest_system_templates_save' ],
 			) );
 			register_rest_route( $this->namespace, '/system/templates', array(
 				'methods' => 'GET',
-				'permission_callback' => array( $this->core, 'can_access_features' ),
-				'callback' => array( $this, 'rest_system_templates_get' ),
+				'permission_callback' => [ $this->core, 'can_access_features' ],
+				'callback' => [ $this, 'rest_system_templates_get' ],
 			) );
 
 			// AI Endpoints
 			register_rest_route( $this->namespace, '/ai/completions', array(
 				'methods' => 'POST',
-				'permission_callback' => array( $this->core, 'can_access_features' ),
-				'callback' => array( $this, 'rest_ai_completions' ),
+				'permission_callback' => [ $this->core, 'can_access_features' ],
+				'callback' => [ $this, 'rest_ai_completions' ],
 			) );
 			register_rest_route( $this->namespace, '/ai/images', array(
 				'methods' => 'POST',
-				'permission_callback' => array( $this->core, 'can_access_features' ),
-				'callback' => array( $this, 'rest_ai_images' ),
+				'permission_callback' => [ $this->core, 'can_access_features' ],
+				'callback' => [ $this, 'rest_ai_images' ],
 			) );
 			register_rest_route( $this->namespace, '/ai/copilot', array(
 				'methods' => 'POST',
-				'permission_callback' => array( $this->core, 'can_access_features' ),
-				'callback' => array( $this, 'rest_ai_copilot' ),
+				'permission_callback' => [ $this->core, 'can_access_features' ],
+				'callback' => [ $this, 'rest_ai_copilot' ],
 			) );
 
 			register_rest_route( $this->namespace, '/ai/magic_wand', array(
 				'methods' => 'POST',
-				'callback' => array( $this, 'rest_ai_magic_wand' ),
-				'permission_callback' => array( $this->core, 'can_access_features' ),
+				'callback' => [ $this, 'rest_ai_magic_wand' ],
+				'permission_callback' => [ $this->core, 'can_access_features' ],
 			) );
 			register_rest_route( $this->namespace, '/ai/moderate', array(
 				'methods' => 'POST',
-				'permission_callback' => array( $this->core, 'can_access_settings' ),
-				'callback' => array( $this, 'rest_ai_moderate' ),
+				'permission_callback' => [ $this->core, 'can_access_settings' ],
+				'callback' => [ $this, 'rest_ai_moderate' ],
 			) );
-			register_rest_route( $this->namespace, '/ai/transcribe', array(
+			register_rest_route( $this->namespace, '/ai/transcribe_audio', array(
 				'methods' => 'POST',
-				'permission_callback' => array( $this->core, 'can_access_settings' ),
-				'callback' => array( $this, 'rest_ai_transcribe' ),
+				'permission_callback' => [ $this->core, 'can_access_settings' ],
+				'callback' => [ $this, 'rest_ai_transcribe_audio' ],
+			) );
+			register_rest_route( $this->namespace, '/ai/transcribe_image', array(
+				'methods' => 'POST',
+				'permission_callback' => [ $this->core, 'can_access_settings' ],
+				'callback' => [ $this, 'rest_ai_transcribe_image' ],
+			) );
+			register_rest_route( $this->namespace, '/ai/json', array(
+				'methods' => 'POST',
+				'permission_callback' => [ $this->core, 'can_access_settings' ],
+				'callback' => [ $this, 'rest_ai_json' ],
 			) );
 
 			// Helpers Endpoints
 			register_rest_route( $this->namespace, '/helpers/update_post_title', array(
 				'methods' => 'POST',
-				'permission_callback' => array( $this->core, 'can_access_features' ),
-				'callback' => array( $this, 'rest_helpers_update_title' ),
+				'permission_callback' => [ $this->core, 'can_access_features' ],
+				'callback' => [ $this, 'rest_helpers_update_title' ],
 			) );
 			register_rest_route( $this->namespace, '/helpers/update_post_excerpt', array(
 				'methods' => 'POST',
-				'permission_callback' => array( $this->core, 'can_access_features' ),
-				'callback' => array( $this, 'rest_helpers_update_excerpt' ),
+				'permission_callback' => [ $this->core, 'can_access_features' ],
+				'callback' => [ $this, 'rest_helpers_update_excerpt' ],
 			) );
 			register_rest_route( $this->namespace, '/helpers/create_post', array(
 				'methods' => 'POST',
-				'permission_callback' => array( $this->core, 'can_access_features' ),
-				'callback' => array( $this, 'rest_helpers_create_post' ),
+				'permission_callback' => [ $this->core, 'can_access_features' ],
+				'callback' => [ $this, 'rest_helpers_create_post' ],
 			) );
 			register_rest_route( $this->namespace, '/helpers/create_image', array(
 				'methods' => 'POST',
-				'permission_callback' => array( $this->core, 'can_access_features' ),
-				'callback' => array( $this, 'rest_helpers_create_images' ),
+				'permission_callback' => [ $this->core, 'can_access_features' ],
+				'callback' => [ $this, 'rest_helpers_create_images' ],
 			) );
 			register_rest_route( $this->namespace, '/helpers/count_posts', array(
 				'methods' => 'GET',
-				'permission_callback' => array( $this->core, 'can_access_features' ),
-				'callback' => array( $this, 'rest_helpers_count_posts' ),
+				'permission_callback' => [ $this->core, 'can_access_features' ],
+				'callback' => [ $this, 'rest_helpers_count_posts' ],
 			) );
 			register_rest_route( $this->namespace, '/helpers/post_types', array(
 				'methods' => 'GET',
-				'permission_callback' => array( $this->core, 'can_access_features' ),
-				'callback' => array( $this, 'rest_helpers_post_types' ),
+				'permission_callback' => [ $this->core, 'can_access_features' ],
+				'callback' => [ $this, 'rest_helpers_post_types' ],
 			) );
 			register_rest_route( $this->namespace, '/helpers/post_content', array(
 				'methods' => 'GET',
-				'permission_callback' => array( $this->core, 'can_access_features' ),
-				'callback' => array( $this, 'rest_helpers_post_content' ),
+				'permission_callback' => [ $this->core, 'can_access_features' ],
+				'callback' => [ $this, 'rest_helpers_post_content' ],
 			) );
 
 			// OpenAI Endpoints
 			register_rest_route( $this->namespace, '/openai/files/list', array(
 				'methods' => 'GET',
-				'permission_callback' => array( $this->core, 'can_access_settings' ),
-				'callback' => array( $this, 'rest_openai_files_get' ),
+				'permission_callback' => [ $this->core, 'can_access_settings' ],
+				'callback' => [ $this, 'rest_openai_files_get' ],
 			) );
 			register_rest_route( $this->namespace, '/openai/files/upload', array(
 				'methods' => 'POST',
-				'permission_callback' => array( $this->core, 'can_access_settings' ),
-				'callback' => array( $this, 'rest_openai_files_upload' ),
+				'permission_callback' => [ $this->core, 'can_access_settings' ],
+				'callback' => [ $this, 'rest_openai_files_upload' ],
 			) );
 			register_rest_route( $this->namespace, '/openai/files/delete', array(
 				'methods' => 'POST',
-				'permission_callback' => array( $this->core, 'can_access_settings' ),
-				'callback' => array( $this, 'rest_openai_files_delete' ),
+				'permission_callback' => [ $this->core, 'can_access_settings' ],
+				'callback' => [ $this, 'rest_openai_files_delete' ],
 			) );
 			register_rest_route( $this->namespace, '/openai/files/download', array(
 				'methods' => 'POST',
-				'permission_callback' => array( $this->core, 'can_access_settings' ),
-				'callback' => array( $this, 'rest_openai_files_download' ),
+				'permission_callback' => [ $this->core, 'can_access_settings' ],
+				'callback' => [ $this, 'rest_openai_files_download' ],
 			) );
 			register_rest_route( $this->namespace, '/openai/files/finetune', array(
 				'methods' => 'POST',
-				'permission_callback' => array( $this->core, 'can_access_settings' ),
-				'callback' => array( $this, 'rest_openai_files_finetune' ),
+				'permission_callback' => [ $this->core, 'can_access_settings' ],
+				'callback' => [ $this, 'rest_openai_files_finetune' ],
 			) );
 			register_rest_route( $this->namespace, '/openai/finetunes/list_deleted', array(
 				'methods' => 'GET',
-				'permission_callback' => array( $this->core, 'can_access_settings' ),
-				'callback' => array( $this, 'rest_openai_deleted_finetunes_get' ),
+				'permission_callback' => [ $this->core, 'can_access_settings' ],
+				'callback' => [ $this, 'rest_openai_deleted_finetunes_get' ],
 			) );
 
-			register_rest_route( $this->namespace, '/openai/models', array(
-				'methods' => 'GET',
-				'permission_callback' => array( $this->core, 'can_access_settings' ),
-				'callback' => array( $this, 'rest_openai_models_get' ),
-			) );
+			// register_rest_route( $this->namespace, '/openai/models', array(
+			// 	'methods' => 'GET',
+			// 	'permission_callback' => [ $this->core, 'can_access_settings' ],
+			// 	'callback' => [ $this, 'rest_openai_models_get' ],
+			// ) );
 
 			register_rest_route( $this->namespace, '/openai/finetunes/list', array(
 				'methods' => 'GET',
-				'permission_callback' => array( $this->core, 'can_access_settings' ),
-				'callback' => array( $this, 'rest_openai_finetunes_get' ),
+				'permission_callback' => [ $this->core, 'can_access_settings' ],
+				'callback' => [ $this, 'rest_openai_finetunes_get' ],
 			) );
 			register_rest_route( $this->namespace, '/openai/finetunes/delete', array(
 				'methods' => 'POST',
-				'permission_callback' => array( $this->core, 'can_access_settings' ),
-				'callback' => array( $this, 'rest_openai_finetunes_delete' ),
+				'permission_callback' => [ $this->core, 'can_access_settings' ],
+				'callback' => [ $this, 'rest_openai_finetunes_delete' ],
 			) );
 			register_rest_route( $this->namespace, '/openai/finetunes/cancel', array(
 				'methods' => 'POST',
-				'permission_callback' => array( $this->core, 'can_access_settings' ),
-				'callback' => array( $this, 'rest_openai_finetunes_cancel' ),
+				'permission_callback' => [ $this->core, 'can_access_settings' ],
+				'callback' => [ $this, 'rest_openai_finetunes_cancel' ],
 			) );
 			register_rest_route( $this->namespace, '/openai/incidents', array(
 				'methods' => 'GET',
-				'permission_callback' => array( $this->core, 'can_access_settings' ),
-				'callback' => array( $this, 'rest_openai_incidents' ),
+				'permission_callback' => [ $this->core, 'can_access_settings' ],
+				'callback' => [ $this, 'rest_openai_incidents' ],
 			) );	
 		}
 		catch ( Exception $e ) {
@@ -332,7 +342,8 @@ class Meow_MWAI_Rest
 			// let's refactor this into a nice and extensible UI/API.
 			$query = new Meow_MWAI_Query_Text( "", 1024 );
 			$query->setEnv( 'admin-tools' );
-			$model = $this->core->get_option( 'assistants_model' );
+			// TODO: We should also use the envId (as the model belongs to it)
+			$model = $this->core->get_option( 'ai_default_model' );
 			if ( !empty( $model ) ) {
 				$query->setModel( $model );
 			}
@@ -363,6 +374,15 @@ class Meow_MWAI_Rest
 				$query->setTemperature( 1 );
 				$query->setMaxResults( 5 );
 			}
+			else if ( $action === 'generateImage' ) {
+				$mode = 'insert';
+				$query = new Meow_MWAI_Query_Image( "Generate an image that is relevant to the following text:\n\n" . $text );
+			}
+			else if ( $action === 'suggestImages' ) {
+				$mode = 'suggest';
+				$query = new Meow_MWAI_Query_Image( "Suggest three images that is relevant to the following text:\n\n" . $text );
+				throw new Exception( 'Not implemented yet.' );
+			}
 			else if ( $action === 'translateText' ) {
 				$query->setPrompt( "Translate the text into {$language}, preserving the tone, mood, and nuance, while staying as true as possible to the original meaning. Provide only the translated text, without any additional content.\n\n" . $text );
 			}
@@ -377,8 +397,35 @@ class Meow_MWAI_Rest
 				$query->setMaxResults( 5 );
 			}
 			$reply = $this->core->ai->run( $query );
+
+			// If it's an image, let's add it to the Media Library and return it.
+			if ( $action === 'generateImage' ) {
+				preg_match( '/\!\[Image\]\((.*?)\)/', $reply->result, $matches );
+				$url = $matches[1] ?? $reply->result;
+				$attachmentId = $this->core->addImageFromURL( $url, null, null, null, null, null, $postId );
+				if ( empty( $attachmentId ) ) {
+					throw new Exception( 'Could not add the image to the Media Library.' );
+				}
+				$media = [
+					'id' => $attachmentId,
+					'url' => wp_get_attachment_url( $attachmentId ),
+					'title' => get_the_title( $attachmentId ),
+					'caption' => wp_get_attachment_caption( $attachmentId ),
+					'alt' => get_post_meta( $attachmentId, '_wp_attachment_image_alt', true )
+				];
+				return new WP_REST_Response([ 
+					'success' => true,
+					'data' => [
+						'mode' => 'insertMedia',
+						'type' => 'image',
+						'media' => $media
+					]
+				], 200 );
+			}
+
 			return new WP_REST_Response([ 'success' => true, 'data' => [
 				'mode' => $mode,
+				'type' => $reply->type,
 				'result' => $reply->result,
 				'results' => $reply->results
 			] ], 200 );
@@ -399,7 +446,8 @@ class Meow_MWAI_Rest
 			}
 			$query = new Meow_MWAI_Query_Text( $prompt, 2048 );
 			$query->setEnv( 'admin-tools' );
-			$model = $this->core->get_option( 'assistants_model' );
+			// TODO: We should also use the envId (as the model belongs to it)
+			$model = $this->core->get_option( 'ai_default_model' );
 			if ( !empty( $model ) ) {
 				$query->setModel( $model );
 			}
@@ -474,19 +522,6 @@ class Meow_MWAI_Rest
 		}
 	}
 
-	function image_download( $url ) {
-		$args = array( 'timeout' => 60, );
-		$response = wp_remote_get( $url, $args );
-		if ( is_wp_error( $response ) ) {
-			throw new Exception( $response->get_error_message() );
-		}
-		$output = wp_remote_retrieve_body( $response );
-		if ( is_wp_error( $output ) ) {
-			throw new Exception( $output->get_error_message() );
-		}
-		return $output;
-	}
-
 	function rest_helpers_create_images( $request ) {
 		try {
 			$params = $request->get_json_params();
@@ -496,45 +531,7 @@ class Meow_MWAI_Rest
 			$description = sanitize_text_field( $params['description'] );
 			$url = $params['url'];
 			$filename = sanitize_text_field( $params['filename'] );
-			$image_data = $this->image_download( $url );
-			if ( !$image_data ) {
-				throw new Exception( 'Could not download the image.' );
-			}
-			$upload_dir = wp_upload_dir();
-			if ( empty( $filename ) ) {
-				$filename = basename( $url );
-			}
-			$wp_filetype = wp_check_filetype( $filename );
-			if ( wp_mkdir_p( $upload_dir['path'] ) ) {
-				$file = $upload_dir['path'] . '/' . $filename;
-			}
-			else {
-				$file = $upload_dir['basedir'] . '/' . $filename;
-			}
-			
-			// Make sure the file is unique, if not, add a number to the end of the file before the extension
-			$i = 1;
-			$parts = pathinfo( $file );
-			while ( file_exists( $file ) ) {
-				$file = $parts['dirname'] . '/' . $parts['filename'] . '-' . $i . '.' . $parts['extension'];
-				$i++;
-			}
-
-			// Write the file
-			file_put_contents( $file, $image_data );
-			$attachment = [
-				'post_mime_type' => $wp_filetype['type'],
-				'post_title' => $title,
-				'post_content' => $description,
-				'post_excerpt' => $caption,
-				'post_status' => 'inherit'
-			];
-			// Register the file as a Media Library attachment
-			$attachmentId = wp_insert_attachment( $attachment, $file );
-			require_once( ABSPATH . 'wp-admin/includes/image.php' );
-			$attachment_data = wp_generate_attachment_metadata( $attachmentId, $file );
-			wp_update_attachment_metadata( $attachmentId, $attachment_data );
-			update_post_meta( $attachmentId, '_wp_attachment_image_alt', $alt );
+			$attachmentId = $this->core->addImageFromURL( $url, $filename, $title, $description, $caption, $alt );
 			return new WP_REST_Response([ 'success' => true, 'attachmentId' => $attachmentId ], 200 );
 		}
 		catch ( Exception $e ) {
@@ -545,9 +542,9 @@ class Meow_MWAI_Rest
 
 	function rest_openai_files_get() {
 		try {
-			//$params = $request->get_json_params();
-			$openai = new Meow_MWAI_Engines_OpenAI( $this->core );
-			$files = $openai->listFiles();
+			$envId = isset( $_GET['envId'] ) ? $_GET['envId'] : null;
+			$openai = new Meow_MWAI_Engines_OpenAI( $this->core, $envId );
+			$files = $openai->list_files();
 			return new WP_REST_Response([ 'success' => true, 'files' => $files ], 200 );
 		}
 		catch ( Exception $e ) {
@@ -556,23 +553,24 @@ class Meow_MWAI_Rest
 		}
 	}
 
-	function rest_openai_models_get() {
-		try {
-			$openai = new Meow_MWAI_Engines_OpenAI( $this->core );
-			$finetunes = $openai->listModels();
-			return new WP_REST_Response([ 'success' => true, 'finetunes' => $finetunes ], 200 );
-		}
-		catch ( Exception $e ) {
-			$message = apply_filters( 'mwai_ai_exception', $e->getMessage() );
-			return new WP_REST_Response([ 'success' => false, 'message' => $message ], 500 );
-		}
-	}
+	// function rest_openai_models_get() {
+	// 	try {
+	// 		$openai = new Meow_MWAI_Engines_OpenAI( $this->core );
+	// 		$finetunes = $openai->listModels();
+	// 		return new WP_REST_Response([ 'success' => true, 'finetunes' => $finetunes ], 200 );
+	// 	}
+	// 	catch ( Exception $e ) {
+	// 		$message = apply_filters( 'mwai_ai_exception', $e->getMessage() );
+	// 		return new WP_REST_Response([ 'success' => false, 'message' => $message ], 500 );
+	// 	}
+	// }
 
 	function rest_openai_deleted_finetunes_get() {
 		try {
+			$envId = isset( $_GET['envId'] ) ? $_GET['envId'] : null;
 			$legacy = isset( $_GET['legacy'] ) ? $_GET['legacy'] === 'true' : false;
-			$openai = new Meow_MWAI_Engines_OpenAI( $this->core );
-			$finetunes = $openai->listDeletedFineTunes( $legacy );
+			$openai = new Meow_MWAI_Engines_OpenAI( $this->core, $envId );
+			$finetunes = $openai->list_deleted_finetunes( $legacy );
 			return new WP_REST_Response([ 'success' => true, 'finetunes' => $finetunes ], 200 );
 		}
 		catch ( Exception $e ) {
@@ -583,9 +581,10 @@ class Meow_MWAI_Rest
 
 	function rest_openai_finetunes_get() {
 		try {
+			$envId = isset( $_GET['envId'] ) ? $_GET['envId'] : null;
 			$legacy = isset( $_GET['legacy'] ) ? $_GET['legacy'] === 'true' : false;
-			$openai = new Meow_MWAI_Engines_OpenAI( $this->core );
-			$finetunes = $openai->listFineTunes( $legacy );
+			$openai = new Meow_MWAI_Engines_OpenAI( $this->core, $envId );
+			$finetunes = $openai->list_finetunes( $legacy );
 			return new WP_REST_Response([ 'success' => true, 'finetunes' => $finetunes ], 200 );
 		}
 		catch ( Exception $e ) {
@@ -597,10 +596,11 @@ class Meow_MWAI_Rest
 	function rest_openai_files_upload( $request ) {
 		try {
 			$params = $request->get_json_params();
+			$envId = $params['envId'];;
 			$filename = sanitize_text_field( $params['filename'] );
 			$data = $params['data'];
-			$openai = new Meow_MWAI_Engines_OpenAI( $this->core );
-			$file = $openai->uploadFile( $filename, $data );
+			$openai = new Meow_MWAI_Engines_OpenAI( $this->core, $envId );
+			$file = $openai->upload_file( $filename, $data );
 			return new WP_REST_Response([ 'success' => true, 'file' => $file ], 200 );
 		}
 		catch ( Exception $e ) {
@@ -612,9 +612,10 @@ class Meow_MWAI_Rest
 	function rest_openai_files_delete( $request ) {
 		try {
 			$params = $request->get_json_params();
+			$envId = $params['envId'];;
 			$fileId = $params['fileId'];
-			$openai = new Meow_MWAI_Engines_OpenAI( $this->core );
-			$openai->deleteFile( $fileId );
+			$openai = new Meow_MWAI_Engines_OpenAI( $this->core, $envId );
+			$openai->delete_file( $fileId );
 			return new WP_REST_Response([ 'success' => true ], 200 );
 		}
 		catch ( Exception $e ) {
@@ -626,9 +627,10 @@ class Meow_MWAI_Rest
 	function rest_openai_finetunes_cancel( $request ) {
 		try {
 			$params = $request->get_json_params();
+			$envId = $params['envId'];;
 			$finetuneId = $params['finetuneId'];
-			$openai = new Meow_MWAI_Engines_OpenAI( $this->core );
-			$openai->cancelFineTune( $finetuneId );
+			$openai = new Meow_MWAI_Engines_OpenAI( $this->core, $envId );
+			$openai->cancel_finetune( $finetuneId );
 			return new WP_REST_Response([ 'success' => true ], 200 );
 		}
 		catch ( Exception $e ) {
@@ -640,9 +642,10 @@ class Meow_MWAI_Rest
 	function rest_openai_finetunes_delete( $request ) {
 		try {
 			$params = $request->get_json_params();
+			$envId = $params['envId'];;
 			$modelId = $params['modelId'];
-			$openai = new Meow_MWAI_Engines_OpenAI( $this->core );
-			$openai->deleteFineTune( $modelId );
+			$openai = new Meow_MWAI_Engines_OpenAI( $this->core, $envId );
+			$openai->delete_finetune( $modelId );
 			return new WP_REST_Response([ 'success' => true ], 200 );
 		}
 		catch ( Exception $e ) {
@@ -654,9 +657,10 @@ class Meow_MWAI_Rest
 	function rest_openai_files_download( $request ) {
 		try {
 			$params = $request->get_json_params();
+			$envId = $params['envId'];;
 			$fileId = $params['fileId'];
-			$openai = new Meow_MWAI_Engines_OpenAI( $this->core );
-			$data = $openai->downloadFile( $fileId );
+			$openai = new Meow_MWAI_Engines_OpenAI( $this->core, $envId );
+			$data = $openai->download_file( $fileId );
 			return new WP_REST_Response([ 'success' => true, 'data' => $data ], 200 );
 		}
 		catch ( Exception $e ) {
@@ -668,6 +672,7 @@ class Meow_MWAI_Rest
 	function rest_openai_files_finetune( $request ) {
 		try {
 			$params = $request->get_json_params();
+			$envId = $params['envId'];;
 			$fileId = $params['fileId'];
 			$model = $params['model'];
 			$suffix = $params['suffix'];
@@ -675,8 +680,8 @@ class Meow_MWAI_Rest
 				"nEpochs" => $params['nEpochs'],
 				"batchSize" => $params['batchSize']
 			];
-			$openai = new Meow_MWAI_Engines_OpenAI( $this->core );
-			$finetune = $openai->fineTuneFile( $fileId, $model, $suffix, $hyperparams );
+			$openai = new Meow_MWAI_Engines_OpenAI( $this->core, $envId );
+			$finetune = $openai->run_finetune( $fileId, $model, $suffix, $hyperparams );
 			return new WP_REST_Response([ 'success' => true, 'finetune' => $finetune ], 200 );
 		}
 		catch ( Exception $e ) {
@@ -692,7 +697,7 @@ class Meow_MWAI_Rest
 				return new WP_REST_Response([ 'success' => true, 'incidents' => $transient ], 200 );
 			}
 			$openai = new Meow_MWAI_Engines_OpenAI( $this->core );
-			$incidents = $openai->getIncidents();
+			$incidents = $openai->get_incidents();
 			set_transient( 'mwai_openai_incidents', $incidents, 60 * 10 );
 			return new WP_REST_Response([ 'success' => true, 'incidents' => $incidents ], 200 );
 		}
@@ -852,11 +857,12 @@ class Meow_MWAI_Rest
 	function rest_ai_moderate( $request ) {
 		try {
 			$params = $request->get_json_params();
+			$envId = $params['envId'];
 			$text = $params['text'];
 			if ( !$text ) {
 				return new WP_REST_Response([ 'success' => false, 'message' => 'Text not found.' ], 404 );
 			}
-			$openai = new Meow_MWAI_Engines_OpenAI( $this->core );
+			$openai = new Meow_MWAI_Engines_OpenAI( $this->core, $envId );
 			$results = $openai->moderate( $text );
 			return new WP_REST_Response([ 'success' => true, 'results' => $results ], 200 );
 		}
@@ -864,10 +870,9 @@ class Meow_MWAI_Rest
 			$message = apply_filters( 'mwai_ai_exception', $e->getMessage() );
 			return new WP_REST_Response([ 'success' => false, 'message' => $message ], 500 );
 		}
-
 	}
 	
-	function rest_ai_transcribe( $request ) {
+	function rest_ai_transcribe_audio( $request ) {
 		try {
 			$params = $request->get_json_params();
 			$query = new Meow_MWAI_Query_Transcribe();
@@ -878,6 +883,36 @@ class Meow_MWAI_Rest
 		}
 		catch ( Exception $e ) {
 			$message = apply_filters( 'mwai_ai_exception', $e->getMessage() );
+			return new WP_REST_Response([ 'success' => false, 'message' => $message ], 500 );
+		}
+	}
+
+	function rest_ai_transcribe_image( $request ) {
+		try {
+			global $mwai;
+			$params = $request->get_json_params();
+			$prompt = !empty( $params['prompt'] ) ? $params['prompt'] : null;
+			$url = !empty( $params['url'] ) ? $params['url'] : null;
+			$path = !empty( $params['path'] ) ? $params['path'] : null;
+			$result = $mwai->simpleVisionQuery( $prompt, $url, $path );
+			return new WP_REST_Response([ 'success' => true, 'data' => $result ], 200 );
+		}
+		catch ( Exception $e ) {
+			$message = apply_filters( 'mwai_ai_exception', $e->getMessage() ); 
+			return new WP_REST_Response([ 'success' => false, 'message' => $message ], 500 );
+		}
+	}
+
+	function rest_ai_json( $request ) {
+		try {
+			global $mwai;
+			$params = $request->get_json_params();
+			$prompt = !empty( $params['prompt'] ) ? $params['prompt'] : null;
+			$result = $mwai->simpleJsonQuery( $prompt );
+			return new WP_REST_Response([ 'success' => true, 'data' => $result ], 200 );
+		}
+		catch ( Exception $e ) {
+			$message = apply_filters( 'mwai_ai_exception', $e->getMessage() ); 
 			return new WP_REST_Response([ 'success' => false, 'message' => $message ], 500 );
 		}
 	}

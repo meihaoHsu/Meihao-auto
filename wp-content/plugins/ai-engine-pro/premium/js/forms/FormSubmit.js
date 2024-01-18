@@ -232,14 +232,21 @@ const FormSubmit = (props) => {
       }
       return;
     }
-    const { success, reply, message } = serverReply;
-    if (success) {
-      render(<OutputHandler baseClass="mwai-form-output" content={reply}
-        isStreaming={isLoading && stream} />, output);
+    // if output is a input or a textarea, let's write the reply there.
+    if (output.tagName === 'INPUT' || output.tagName === 'TEXTAREA') {
+      output.value = serverReply.reply;
+      return;
     }
     else {
-      render(<OutputHandler baseClass="mwai-form-output" error={message}
-        isStreaming={isLoading && stream} />, output);
+      const { success, reply, message } = serverReply;
+      if (success) {
+        render(<OutputHandler baseClass="mwai-form-output" content={reply}
+          isStreaming={isLoading && stream} />, output);
+      }
+      else {
+        render(<OutputHandler baseClass="mwai-form-output" error={message}
+          isStreaming={isLoading && stream} />, output);
+      }
     }
   }, [isLoading, stream, serverReply]);
 

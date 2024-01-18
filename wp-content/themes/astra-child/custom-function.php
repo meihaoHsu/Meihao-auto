@@ -110,7 +110,17 @@ class CustomFunction
     public function set_product_filter_content($output, $data, $post){
         if($post->post_type == 'product'){
             $product = wc_get_product($post->ID);
-            $output = '<a href="'.$product->get_permalink().'"><div class="filter-product-price">'.$product->get_price_html().'</div></a>';
+            $color_term_ids = wc_get_product_term_ids($post->ID,'pa_color');
+            if($color_term_ids){
+                $output ='<ul style="list-style: none;display: flex;flex-wrap: wrap;justify-content: space-evenly;">';
+                foreach ($color_term_ids as $color_term_id){
+                    $color = sanitize_hex_color( woo_variation_swatches()->get_frontend()->get_product_attribute_color( $color_term_id ) );
+                    $output .= '<a href="'.$product->get_permalink().'">
+                    <li style="width:15px;height:15px; background-color:'.$color.';border: 1px outset #000000;border-radius: 2px;"></li></a>';
+                }
+                $output .='</ul>';
+            }
+            $output .= '<a href="'.$product->get_permalink().'"><div class="filter-product-price">'.$product->get_price_html().'</div></a>';
         }else if($post->post_type == 'repair') {
             $repair_title = get_post_meta($post->ID, 'repair_title', 1);
             $repair_phone = get_post_meta($post->ID, 'repair_phone', 1);
@@ -143,12 +153,13 @@ class CustomFunction
             'query_var' 			=> true, 'capability_type' 		=> 'post',
             'hierarchical' 			=> false, 'menu_position' 		=> null,
             'has_archive'           => true, 'exclude_from_search'   => true,
-            'supports' 				=> array('title'),
+            'supports' 				=> array('title','editor'),
         );
         register_post_type( 'repair', $args );
     }
     public function add_meta_boxes(){
         add_meta_box( 'repair-detail', '維修站點內容',  [$this,'repair_detail_meta_box'], 'repair', 'normal' );
+        add_meta_box( 'OriginalSKU', '原廠SKU',  [$this,'original_SKU'], 'product', 'side','high');
     }
     public function customer_post_taxonomy(){
         register_taxonomy( 'brand', ['repair','product'], array(
@@ -175,6 +186,11 @@ class CustomFunction
         ob_end_clean();
         echo $template;
     }
+    public function original_SKU($post){
+        ?>
+        <input type="text" name="original_SKU" placeholder="原廠SKU"  value="<?=($original_SKU=get_post_meta($post->ID,'original_SKU',1))?$original_SKU:'';?>">
+        <?php
+    }
     public function save_data_for_custom($post_id){
         $post_type = get_post_type($post_id);
         if($post_type == 'repair'){
@@ -189,6 +205,12 @@ class CustomFunction
             if(isset($_POST['repair_address'])){
                 $subtitle_meta_box = $_POST['repair_address'];
                 update_post_meta($post_id, 'repair_address', $subtitle_meta_box);
+            }
+        }
+        if($post_type == 'product'){
+            if(isset($_POST['original_SKU'])){
+                $original_SKU = $_POST['original_SKU'];
+                update_post_meta($post_id, 'original_SKU', $original_SKU);
             }
         }
 

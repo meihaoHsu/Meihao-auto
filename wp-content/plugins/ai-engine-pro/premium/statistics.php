@@ -99,7 +99,8 @@ class MeowPro_MWAI_Statistics {
   function addCasually( Meow_MWAI_Query_Base $query, Meow_MWAI_Reply $reply, $overrides ) {
     $type = null;
     $units = 0;
-    if ( is_a( $query, 'Meow_MWAI_Query_Text' ) || is_a( $query, 'Meow_MWAI_Query_Embed' ) ) {
+    if ( is_a( $query, 'Meow_MWAI_Query_Text' ) || is_a( $query, 'Meow_MWAI_Query_Embed' ) ||
+      is_a( $query, 'Meow_MWAI_Query_Assistant' ) ) {
       $type = 'tokens';
       $units = $reply->getUnits();
     }
@@ -119,8 +120,10 @@ class MeowPro_MWAI_Statistics {
       'session' => $query->session,
       'mode' => $query->mode,
       'model' => $query->model,
-      'apiRef' => $query->service === 'openai' ? $query->apiKey : $query->azureApiKey,
-      'apiSrv' => $query->service, // typically, it's 'openai' or 'azure'
+      'apiRef' => $query->apiKey,
+      // TODO: Rename apiSrv into envId
+      'apiSrv' => $query->envId, // typically, it's 'openai' or 'azure'
+      // TODO: Do we really even need apiOwn?
       'apiOwn' => 'admin', // 'admin' means the request is being ran with the API Keys of the WordPress install.
       'units' => $units,
       'type' => $type,
@@ -128,7 +131,7 @@ class MeowPro_MWAI_Statistics {
     $stats = array_merge( $stats, $overrides );
     if ( empty( $stats['price'] ) ) {
       $openai = new Meow_MWAI_Engines_OpenAI( $this->core );
-      $stats['price'] = $openai->getPrice( $query, $reply );
+      $stats['price'] = $openai->get_price( $query, $reply );
     }
 
     $logId = $this->add( $stats );
@@ -138,6 +141,15 @@ class MeowPro_MWAI_Statistics {
     if ( $this->core->get_option( 'statistics_data' ) ) {
       $this->addMetadata( $logId, 'query', $jsonQuery );
       $this->addMetadata( $logId, 'reply', $jsonAnswer );
+    }
+
+    if ( $this->core->get_option( 'statistics_forms_data' ) ) {
+      if ( $query->env === 'form' ) {
+        $fields = $query->getExtraParam( 'fields' );
+        if ( !empty( $fields ) ) {
+          $this->addMetadata( $logId, 'fields', json_encode( $fields ) );
+        }
+      }
     }
 
     return true;
@@ -506,6 +518,9 @@ class MeowPro_MWAI_Statistics {
       }
       else if ( $value['meta_key'] === 'reply' ) {
         $meta['reply'] = json_decode( $value['meta_value'], true );
+      }
+      else if ( $value['meta_key'] === 'fields' ) {
+        $meta['fields'] = json_decode( $value['meta_value'], true );
       }
     }
     return $meta;

@@ -13,6 +13,11 @@ class MeowPro_MWAI_Core {
 		// Content Aware
 		new MeowPro_MWAI_ContentAware( $core );
 
+		// Assistants
+		if ( $this->core->get_option( 'module_assistants', false ) ) {
+			$mwai_assistants = new MeowPro_MWAI_Assistants( $core );
+		}
+
 		// Statistics
 		if ( $this->core->get_option( 'module_statistics', false ) ) {
 			global $mwai_stats;

@@ -30,13 +30,14 @@ define( 'MWAI_CHATBOT_DEFAULT_PARAMS', [
 	'env' => 'chatbot',
 	'mode' => 'chat',
 	'contentAware' => false,
+	'embeddingsEnvId' => '',
 	'embeddingsIndex' => '',
 	'embeddingsNamespace' => null,
 	'casuallyFineTuned' => false,
 	'promptEnding' => null,
 	'completionEnding' => null,
 	// AI Parameters
-	'model' => MWAI_DEFAULT_MODEL,
+	'model' => MWAI_FALLBACK_MODEL,
 	'temperature' => 0.8,
 	'maxTokens' => 1024,
 	'maxResults' => 1,
@@ -79,7 +80,7 @@ define( 'MWAI_CHATBOT_PARAMS', [
 	'prompt_ending' => null,
 	'completion_ending' => null,
 	// AI Parameters
-	'model' => MWAI_DEFAULT_MODEL,
+	'model' => MWAI_FALLBACK_MODEL,
 	'temperature' => 0.8,
 	'max_tokens' => 1024,
 	'max_results' => 1,
@@ -137,9 +138,8 @@ define( 'MWAI_OPTIONS', [
 	'module_moderation' => false,
 	'module_statistics' => false,
 	'module_finetunes' => false,
-	'module_legacy_finetunes' => false,
 	'module_embeddings' => false,
-	'module_audio' => false,
+	'module_transcription' => false,
 	'shortcode_chat' => true,
 	'shortcode_chat_params' => MWAI_CHATBOT_PARAMS,
 	'shortcode_chat_params_override' => false,
@@ -156,23 +156,63 @@ define( 'MWAI_OPTIONS', [
 	'shortcode_chat_inject' => false,
 	'shortcode_chat_styles' => [],
 	'limits' => MWAI_LIMITS,
-	'openai_apikey' => false,
-	'openai_service' => 'openai', // 'openai', 'azure' (if not set here, it will use the Settings)
-	'openai_usage' => [],
+
+	// General Settings for OpenAI
+	'fallback_model' => MWAI_FALLBACK_MODEL,
 	'openai_models' => Meow_MWAI_Engines_OpenAI::get_openai_models(),
+	'openai_usage' => [],
+
+	// Settings for Images
+	'image_local_upload' => 'uploads',
+	'image_remote_upload' => 'data',
+	'image_expires' => 1 * HOUR_IN_SECONDS,
+
+	// TODO: To Migrate (Azure)
 	'openai_azure_endpoint' => '',
 	'openai_azure_apikey' => '',
 	'openai_azure_deployments' => [],
+
+	// TODO: To Migrate (OpenAI)
+	'openai_apikey' => false,
 	'openai_finetunes' => [], // All finetunes listed by OpenAI
 	'openai_finetunes_deleted' => [], // The finetunes that have been deleted
 	'openai_legacy_finetunes' => [],
 	'openai_legacy_finetunes_deleted' => [],
-	'pinecone' => [
-		'apikey' => false,
-		'server' => 'us-east1-gcp',
-		'namespace' => 'mwai',
-		'indexes' => [],
-		'index' => null
+
+	// TODO: openai_service to ai_env_default
+	'openai_service' => 'openai', // 'openai', 'azure' (if not set here, it will use the Settings)
+
+	'ai_default_env' => null,
+	'ai_default_model' => MWAI_FALLBACK_MODEL,
+	'ai_envs' => [
+		[
+			'name' => 'OpenAI',
+			'type' => 'openai',
+			'apikey' => '',
+			'finetunes' => [],
+			'finetunes_deleted' => [],
+			'legacy_finetunes' => [],
+			'legacy_finetunes_deleted' => [],
+			'usage' => [], // TODO:  We should only keep the last year of usage
+		],
+		[
+			'name' => 'Azure',
+			'type' => 'azure/openai',
+			'apikey' => '',
+		]
+	],
+
+	'embeddings_default_env' => null,
+	'embeddings_envs' => [
+		[
+			'name' => 'Pinecone',
+			'type' => 'pinecone',
+			'apikey' => '',
+			'server' => 'gcp-starter',
+			'indexes' => [],
+			'namespaces' => [],
+			'index' => null
+		]
 	],
 	'embeddings' => [
 		'rewriteContent' => true,
@@ -181,6 +221,7 @@ define( 'MWAI_OPTIONS', [
 		'maxSelect' => 1,
 		'minScore' => 75,
 		'syncPosts' => false,
+		'syncPostsEnv' => null,
 		'syncPostTypes' => ['post', 'page', 'product'],
 		'syncPostStatus' => ['publish'],
 	],
@@ -191,10 +232,10 @@ define( 'MWAI_OPTIONS', [
 	'resolve_shortcodes' => false,
 	'dynamic_max_tokens' => true,
 	'context_max_tokens' => 1024,
-	'assistants_model' => MWAI_DEFAULT_MODEL,
 	'banned_words' => [],
 	'banned_ips' => [],
-	'languages' => MWAI_LANGUAGES
+	'languages' => MWAI_LANGUAGES,
+	'clean_uninstall' => false,
 ] );
 
 define( 'MWAI_ALL_LANGUAGES', [

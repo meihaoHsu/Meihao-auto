@@ -53,6 +53,40 @@ define( 'MWAI_OPENAI_MODELS', [
 		"finetune" => false,
 		"tags" => ['core', 'chat']
 	],
+	[
+		"model" => "gpt-4-vision-preview",
+		"name" => "GPT-4 Turbo (Vision)",
+		"family" => "gpt4",
+		"price" => [
+			"in" => 0.01,
+			"out" => 0.03,
+		],
+		"type" => "token",
+		"unit" => 1 / 1000,
+		"maxTokens" => 4096, // We should upgrade to maxCompletionTokens and maxContextualTokens
+		"maxCompletionTokens" => 4096,
+		"maxContextualTokens" => 128000,
+		"mode" => "chat",
+		"finetune" => false,
+		"tags" => ['core', 'chat', 'vision', 'preview', 'json']
+	],
+	[
+		"model" => "gpt-4-1106-preview",
+		"name" => "GPT-4 Turbo",
+		"family" => "gpt4",
+		"price" => [
+			"in" => 0.01,
+			"out" => 0.03,
+		],
+		"type" => "token",
+		"unit" => 1 / 1000,
+		"maxTokens" => 4096, // We should upgrade to maxCompletionTokens and maxContextualTokens
+		"maxCompletionTokens" => 4096,
+		"maxContextualTokens" => 128000,
+		"mode" => "chat",
+		"finetune" => false,
+		"tags" => ['core', 'chat', 'preview', 'json']
+	],
 	[ 
 		"model" => "gpt-4-32k",
 		"name" => "gpt-4-32k",
@@ -78,12 +112,14 @@ define( 'MWAI_OPENAI_MODELS', [
 		],
 		"type" => "token",
 		"unit" => 1 / 1000,
-		"maxTokens" => 4096,
 		"mode" => "completion",
 		"finetune" => [
 			"in" => 0.03,
 			"out" => 0.06,
 		],
+		"maxTokens" => 4096, // TODO: We shouldn't have this here anymore, it should be only a setting
+		"maxCompletionTokens" => null, // TODO: Because we only have a maxContextual...
+		"maxContextualTokens" => 4096,
 		"tags" => ['core', 'chat', '4k']
 	],
   [
@@ -145,14 +181,14 @@ define( 'MWAI_OPENAI_MODELS', [
   // Image models:
   [
 		"model" => "dall-e",
-		"name" => "dall-e",
+		"name" => "DALL-E 2",
 		"family" => "dall-e",
 		"type" => "image",
 		"unit" => 1,
 		"options" => [
       [
 				"option" => "1024x1024",
-				"price" => 0.02
+				"price" => 0.020
 			],
       [
 				"option" => "512x512",
@@ -161,6 +197,52 @@ define( 'MWAI_OPENAI_MODELS', [
       [
 				"option" => "256x256",
 				"price" => 0.016
+			]
+    ],
+		"finetune" => false,
+		"tags" => ['core', 'image']
+  ],
+	[
+		"model" => "dall-e-3",
+		"name" => "DALL-E 3",
+		"family" => "dall-e",
+		"type" => "image",
+		"unit" => 1,
+		"options" => [
+      [
+				"option" => "1024x1024",
+				"price" => 0.040
+			],
+      [
+				"option" => "1024x1792",
+				"price" => 0.080
+			],
+			[
+				"option" => "1792x1024",
+				"price" => 0.080
+			]
+    ],
+		"finetune" => false,
+		"tags" => ['core', 'image']
+  ],
+	[
+		"model" => "dall-e-3-hd",
+		"name" => "DALL-E 3 (HD)",
+		"family" => "dall-e",
+		"type" => "image",
+		"unit" => 1,
+		"options" => [
+      [
+				"option" => "1024x1024",
+				"price" => 0.080
+			],
+      [
+				"option" => "1024x1792",
+				"price" => 0.120
+			],
+			[
+				"option" => "1792x1024",
+				"price" => 0.120
 			]
     ],
 		"finetune" => false,

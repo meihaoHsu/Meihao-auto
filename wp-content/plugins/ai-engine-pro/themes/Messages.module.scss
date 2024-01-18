@@ -234,54 +234,90 @@
 			flex: auto;
 			position: relative;
 			display: flex;
+			background: var(--mwai-backgroundPrimaryColor);
+			border-radius: var(--mwai-borderRadius);
+			border: 1px solid var(--mwai-backgroundAiSecondaryColor);
+			overflow: hidden;
 
 			textarea {
+				background: var(--mwai-backgroundPrimaryColor);
+				color: var(--mwai-fontColor);
 				flex: auto;
-				padding: 5px 10px;
+				padding: var(--mwai-spacing);
+				border: none;
+				font-size: var(--mwai-fontSize);
+				resize: none;
 				font-family: inherit;
-				border-radius: var(--mwai-borderRadius);
-				border: 1px solid var(--mwai-backgroundAiSecondaryColor);
-
+				margin: 0;
+				overflow: hidden;
+	
 				&:focus {
 					outline: none;
 					box-shadow: none;
 				}
-
+	
 				&::placeholder {
 					color: var(--mwai-fontColor);
 					opacity: 0.5;
 				}
 			}
-		}
 
-		.mwai-microphone {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			position: absolute;
-			right: 0px;
-			height: 100%;
-			cursor: pointer;
+			.mwai-microphone, .mwai-image-upload {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				height: 100%;
+				cursor: pointer;
 
-			svg {
-				fill: var(--mwai-fontColor);
-				width: 34px;
-				height: 34px;
-				padding: 5px 10px;
-				fill: var(--mwai-fontColor);
-				opacity: 0.5;
-				transition: opacity 0.3s ease-out;
-			}
-
-			&[active=true] {
 				svg {
-					opacity: 1;
+					fill: var(--mwai-fontColor);
+					width: 34px;
+					height: 34px;
+					fill: var(--mwai-fontColor);
+					opacity: 0.5;
+					transition: opacity 0.3s ease-out;
+				}
+
+				&[active=true] {
+					svg {
+						opacity: 1;
+					}
+				}
+	
+				&[disabled] {
+					svg {
+						opacity: 0;
+					}
 				}
 			}
 
-			&[disabled] {
+			.mwai-image-upload {
+				margin-left: 5px;
+				margin-right: -5px;
+
 				svg {
-					opacity: 0;
+					width: 42px;
+					height: 42px;
+					padding: 5px;
+				}
+
+				span {
+					position: absolute;
+					font-size: 55%;
+				}
+
+				&.enabled {
+					svg {
+						opacity: 1;
+						filter: none;
+					}
+				}
+			}
+
+			.mwai-microphone {
+
+				svg {
+					padding: 5px 10px;
 				}
 			}
 		}
@@ -313,20 +349,28 @@
 	}
 
 	button[disabled] {
+		cursor: not-allowed;
 
 		span {
-			display: none;
+			opacity: 0.5;
 		}
 
-		&:before {
-			content: '';
-			width: 14px;
-			height: 14px;
-			margin: auto;
-			border: 2px solid transparent;
-			border-top-color: white;
-			border-radius: 50%;
-			animation: mwai-button-spinner 1s ease infinite;
+		&.mwai-busy {
+
+			span {
+				display: none;
+			}
+
+			&:before {
+				content: '';
+				width: 18px;
+				height: 18px;
+				margin: auto;
+				border: 3px solid transparent;
+				border-top-color: var(--mwai-fontColor);
+				border-radius: 50%;
+				animation: mwai-button-spinner 1s ease infinite;
+			}
 		}
 	}
 

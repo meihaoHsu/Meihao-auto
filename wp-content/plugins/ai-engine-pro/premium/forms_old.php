@@ -40,7 +40,7 @@ class MeowPro_MWAI_Forms_Old {
     try {
 			$params = $request->get_json_params();
       $prompt = isset( $params['prompt'] ) ? $params['prompt'] : "";
-      $model = isset( $params['model'] ) ? $params['model'] : MWAI_DEFAULT_MODEL;
+      $model = isset( $params['model'] ) ? $params['model'] : MWAI_FALLBACK_MODEL;
       $context = null;
 
       // Take care of the parameters
@@ -200,7 +200,7 @@ class MeowPro_MWAI_Forms_Old {
     $idForFn = preg_replace( '/[^a-zA-Z0-9]/', '_', $id ); // New ID safe to be used as function names
 
     // OpenAI Parameters
-    $model = !empty( $atts['model'] ) ? $atts['model'] : MWAI_DEFAULT_MODEL;
+    $model = !empty( $atts['model'] ) ? $atts['model'] : MWAI_FALLBACK_MODEL;
     $embeddingsIndex = !empty( $atts['embeddings_index'] ) ? $atts['embeddings_index'] : null;
     $prompt = !empty( $atts['prompt'] ) ? $atts['prompt'] : "";
     $prompt = addslashes( urldecode( $prompt ) );

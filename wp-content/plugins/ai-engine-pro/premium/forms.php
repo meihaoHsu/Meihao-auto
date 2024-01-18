@@ -2,7 +2,9 @@
 
 define( 'MWAI_FORMS_FRONT_PARAMS', [ 'id', 'label', 'type', 'name', 'options', 'copyButton',
   'required', 'placeholder', 'default', 'maxlength', 'rows', 'outputElement' ] );
-define( 'MWAI_FORMS_SERVER_PARAMS', [ 'model', 'temperature', 'maxToken', 'prompt', 'embeddingsIndex' ] );
+define( 'MWAI_FORMS_SERVER_PARAMS', [ 'model', 'temperature', 'maxTokens', 'prompt', 'envId', 'env',
+  'assistantId', 'embeddingsIndex', 'embeddingsEnv', 'embeddingsEnvId', 'embeddingsNamespace'
+] );
 
 class MeowPro_MWAI_Forms {
   private $core = null;
@@ -97,7 +99,7 @@ class MeowPro_MWAI_Forms {
       $systemParams['prompt'] = $systemParams['prompt'] ?? "";
       $model = isset( $params['model'] ) ? $params['model'] : $systemParams['model'] ?? "";
       if ( empty( $model ) ) {
-        $model = MWAI_DEFAULT_MODEL;
+        $model = MWAI_FALLBACK_MODEL;
       }
 
       // Prepare the prompt (based on the fields).
@@ -117,8 +119,8 @@ class MeowPro_MWAI_Forms {
 
       // Take care of the parameters
       $query = null;
-      if ( $model === 'dall-e' ) {
-        $query = new Meow_MWAI_Query_Image( $prompt );
+      if ( substr( $model, 0, 6 ) === 'dall-e' ) {
+        $query = new Meow_MWAI_Query_Image( $prompt, $model );
         $query->injectParams( $systemParams );
       }
       else if ( $model === 'whisper-1' ) {
@@ -128,14 +130,22 @@ class MeowPro_MWAI_Forms {
         $query->setURL( $prompt );
       }
       else {
-        $query = new Meow_MWAI_Query_Text( $prompt, 4096 );
+        $query = !empty( $systemParams['assistantId'] ) ?
+          new Meow_MWAI_Query_Assistant( $prompt ) : 
+					new Meow_MWAI_Query_Text( $prompt, 4096 );
         $query->injectParams( $systemParams );
 
         // Awareness & Embeddings
 				// TODO: This is same in Chatbot Legacy and Forms, maybe we should move it to the core?
+        $embeddingsEnvId = $systemParams['embeddingsEnvId'] ?? $systemParams['embeddingsEnv'] ?? null;
 				$embeddingsIndex = $systemParams['embeddingsIndex'] ?? null;
+        $embeddingsNamespace = $systemParams['embeddingsNamespace'] ?? null;
 				if ( $query->mode === 'chat' ) {
-					$context = apply_filters( 'mwai_context_search', $context, $query, [ 'embeddingsIndex' => $embeddingsIndex ] );
+					$context = apply_filters( 'mwai_context_search', $context, $query, [ 
+            'embeddingsEnvId' => $embeddingsEnvId,
+            'embeddingsIndex' => $embeddingsIndex,
+            'embeddingsNamespace' => $embeddingsNamespace
+          ] );
 					if ( !empty( $context ) ) {
 						if ( isset( $context['content'] ) ) {
 							$content = $this->core->cleanSentences( $context['content'] );
@@ -147,6 +157,8 @@ class MeowPro_MWAI_Forms {
 					}
 				}
       }
+
+      $query->setExtraParam( 'fields', $fields );
 
       // Process Query
 			if ( $stream ) { 
@@ -284,7 +296,7 @@ class MeowPro_MWAI_Forms {
     $prompt = $serverParams['prompt'];
     $inputs = [ 'fields' => [], 'selectors' => [] ];
     $matches = [];
-    preg_match_all( '/{([A-Za-z0-9_]+)}/', $prompt, $matches );
+    preg_match_all( '/{([A-Za-z0-9_-]+)}/', $prompt, $matches );
     foreach ( $matches[1] as $match ) {
       $inputs['fields'][] = $match;
     }

@@ -1,11 +1,11 @@
 === AI Engine: Chatbots, Generators, Assistants, GPT 4 and more! (Pro) ===
 Contributors: TigrouMeow
-Tags: ai, chatgpt, gpt, openai, chatbot, copilot
+Tags: ai, gpt, openai, chatbot, copilot, chatgpt
 Donate link: https://meowapps.com/donation/
 Requires at least: 6.0
-Tested up to: 6.3.1
+Tested up to: 6.4
 Requires PHP: 7.4
-Stable tag: 1.9.87
+Stable tag: 2.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,7 +18,7 @@ Please make sure you read the [disclaimer](https://meowapps.com/ai-engine/discla
 
 == Features ==
 
-* Models: ChatGPT, GPT-3, GPT-3 16k, GPT-4, GPT-4 32k, DaVinci, Babbage, etc.
+* Models: GPT-4 Turbo, GPT-4 Vision, GPT-3.5 Turbo, GPT-3, etc
 * Add a ChatGPT chatbot (or an images creation bot) to your website easily
 * Generate fresh and engaging content for your site
 * Use the AI Copilot to help you brainstorm ideas and write faster
@@ -82,11 +82,86 @@ Languages: English.
 
 == Changelog ==
 
+= 2.0.3 (2023/11/26) =
+* Add: Assistants are now usable in AI Forms.
+* Add: New tab "Fields" in "Queries" tab (to inspect what was send via the AI Forms).
+* Add: Added "Generate Image" in the AI CoPilot. 
+* Fix: Models weren't displayed correctly when Azure was chosen as the default environment.
+* 🎵 Discuss with other users about features and issues on [my Discord](https://discord.gg/bHDGh38).
+* 🌴 Keep us motivated with [a little review here](https://wordpress.org/support/plugin/ai-engine/reviews/). Thank you!
+
+= 2.0.1 (2023/11/21) =
+* Add: Implemented the new OpenAI Assistants (Pro). It's beta, but it's there!
+* Update: The former "Assistants" (which were tools in the Admin section) have been renamed into "Utilities".
+* Update: Better control of who/what is using the REST API.
+
+= 1.9.99 (2023/11/17) =
+* Update: Cleaner way of handling errors in the chatbot.
+* Update: Enhanced the way the files are uploaded, and follow the rules set by the Media Library.
+
+= 1.9.98 (2023/11/16) =
+* Update: Enhanced the Images Generator a lot, you can now add tasks to it, and let them run. The idea is to move this experience at some point to the Post Editor. 
+* Update: The URLs returned by DALL-E are now properly converted into Markdown (and therefore, HTML on the front-end).
+* Update: Meow_MWAI_Query_Image is now using DALL-E 3 by default, and 1792x1024 as the resolution.
+* Update: Better Discussions UI, displaying the images if they are still available.
+
+= 1.9.97 (2023/11/15) =
+* Add: Support for DALL-E 3.
+* Fix: Many little fixes.
+
+= 1.9.96 (2023/11/13) =
+* Add: GPT-4 model without Vision (since its RPM is much higher).
+* Add: simpleJsonQuery function, to retrieve a JSON from the AI.
+* Add: New Transcription tab with Image to Text, Audio to Text, Prompt to JSON.
+* Add: Useful information are dynamically added under Max Tokens fields. Let's try to make the issues around Max Tokens easier to understand and handle!
+* Add: Support for errors from OpenAI while using streaming.
+* Fix: MaxTokens in the forms was not working properly.
+* Fix: Android Speech Recognition was not working properly.
+* Fix: Issue with inputs and textareas when they were used as Output in the Forms.
+
+= 1.9.95 (2023/11/10) =
+* Add: New "Images" section in the Settings related to "Vision".
+* Update: Much better handling of images (where/how it's stored and sent to the models, their expiries, etc).
+
+= 1.9.94 (2023/11/07) =
+* Add: Support for GPT-4 Turbo.
+* Add: Support for Qdrant (alternative to Pinecone).
+* Add: Support for Vision within the chatbot. It is ultra experimental, but it's there! Play with it, but the user experience has to be improved.
+
+= 1.9.93 (2023/11/03) =
+* 🚀 Please check the previous changelog entry.
+* Update: Removed a lot of useless code related to legacy chatbot, finetuning, etc.
+* Fix: Conversations were not being logged for known IDs.
+
+= 1.9.92 (2023/11/02) =
+* Add: Multi-environments for AIs are now supported.
+* Update: Discussions are now formatted in the admin too.
+* Update: Added new Pinecone environments.
+* Update: Enhanced the text cleaning functions to optimize the tokens count.
+* Fix: Various fixes and enhancements.
+* 🎃 This is major update; check your Settings, Chatbots and Forms.
+
+= 1.9.91 (2023/10/24) =
+* Update: Auto Sync Posts now can be set to use a specific environment, index and namespace.
+* Fix: Remove many warnings in the JS console.
+* Fix: Chatbot with IDs can now be overriden properly.
+
+= 1.9.90 (2023/10/22) =
+* Add: Sync Pull (to download remote embeddings - it does not insure that they have content however).
+* Update: Better UI for Embeddings. 
+* Fix: Many fixes linked to AI Search, auto-retrieval of remote embeddings, and the way the data is handled.
+* Fix: Minimum Score and Max Embeddings are now working correctly throughout the plugin.
+* Fix: Unselecting an embedding environment will now remove the index and the namespace.
+* Fix: A bunch of tiny additional fixes.
+
+= 1.9.88 (2023/10/16) =
+* Add: Support of multi-environments with embeddings (only Pinecone environments for now, but more will come soon).
+* Fix: Various issues when using embeddings without namespaces.
+* Fix: Various other little issues.
+
 = 1.9.87 (2023/10/04) =
 * Fix: The mwai_context_search was not being always called.
 * Update: Many enhancements with the Embeddings to make them more flexible and powerful, with better error handling.
-* 🎵 Discuss with other users about features and issues on [my Discord](https://discord.gg/bHDGh38).
-* 🌴 Keep me motivated with [a little review here](https://wordpress.org/support/plugin/ai-engine/reviews/). Thank you!
 
 = 1.9.86 (2023/10/02) =
 * Fix: Issue with model being overriden by the default model in the chatbot.

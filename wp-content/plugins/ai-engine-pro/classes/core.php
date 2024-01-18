@@ -18,11 +18,15 @@ class Meow_MWAI_Core
 	public $is_cli = false;
 	public $site_url = null;
 	public $ai = null;
+	public $files = null;
 	private $option_name = 'mwai_options';
 	private $themes_option_name = 'mwai_themes';
 	private $chatbots_option_name = 'mwai_chatbots';
 	private $nonce = null;
 	public $defaultChatbotParams = MWAI_CHATBOT_PARAMS;
+
+	public $chatbot = null;
+	public $discussions = null;
 
 	// Cached
 	private $options = null;
@@ -32,6 +36,8 @@ class Meow_MWAI_Core
 		$this->is_rest = MeowCommon_Helpers::is_rest();
 		$this->is_cli = defined( 'WP_CLI' );
 		$this->ai = new Meow_MWAI_Engines_Core( $this );
+		$this->files = new Meow_MWAI_Modules_Files( $this );
+
 		add_action( 'plugins_loaded', array( $this, 'init' ) );
 		add_action( 'wp_register_script', array( $this, 'register_scripts' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
@@ -41,20 +47,19 @@ class Meow_MWAI_Core
 	#region Init & Scripts
 	function init() {
 		global $mwai;
-		$chatbot_module = null;
-		$discussions_module = null;
+		$this->chatbot = null;
+		$this->discussions = null;
 		new Meow_MWAI_Modules_Security( $this );
 		if ( $this->is_rest ) {
 			new Meow_MWAI_Rest( $this );
 		}
 		if ( is_admin() ) {
 			new Meow_MWAI_Admin( $this );
-			new Meow_MWAI_Modules_Assistants( $this );
+			new Meow_MWAI_Modules_Utilities( $this );
 		}
 		if ( $this->get_option( 'shortcode_chat' ) ) {
-			$chatbot_module = new Meow_MWAI_Modules_Chatbot();
-			$discussions_module = new Meow_MWAI_Modules_Discussions();
-			// new Meow_MWAI_Modules_Chatbot_Legacy();
+			$this->chatbot = new Meow_MWAI_Modules_Chatbot();
+			$this->discussions = new Meow_MWAI_Modules_Discussions();
 		}
 
 		// Advanced core
@@ -67,7 +72,7 @@ class Meow_MWAI_Core
 			add_filter( 'mwai_estimate_tokens', array( $this, 'dynamic_max_tokens' ), 10, 2 );
 		}
 
-		$mwai = new Meow_MWAI_API( $chatbot_module, $discussions_module );
+		$mwai = new Meow_MWAI_API( $this->chatbot, $this->discussions );
 	}
 
 	public function register_scripts() {
@@ -106,6 +111,8 @@ class Meow_MWAI_Core
 		$text = html_entity_decode( $rawText );
 		$text = wp_strip_all_tags( $text );
 		$text = preg_replace( '/[\r\n]+/', "\n", $text );
+		$text = preg_replace( '/\n+/', "\n", $text );
+		$text = preg_replace( '/\t+/', "\t", $text );
 		return $text . " ";
   }
 
@@ -177,12 +184,77 @@ class Meow_MWAI_Core
 	}
 	#endregion
 
+ 	#region Image-Related Helpers
+	function downloadImage( $url ) {
+		$args = array( 'timeout' => 60, );
+		$response = wp_remote_get( $url, $args );
+		if ( is_wp_error( $response ) ) {
+			throw new Exception( $response->get_error_message() );
+		}
+		$output = wp_remote_retrieve_body( $response );
+		if ( is_wp_error( $output ) ) {
+			throw new Exception( $output->get_error_message() );
+		}
+		return $output;
+	}
+
+	public function addImageFromURL( $url, $filename = null, $title = null, $description = null, $caption = null, $alt = null ) {
+		$image_data = $this->downloadImage( $url );
+		if ( !$image_data ) {
+			throw new Exception( 'Could not download the image.' );
+		}
+		$upload_dir = wp_upload_dir();
+		if ( empty( $filename ) ) {
+			$filename = basename( $url );
+			$filename = sanitize_file_name( $filename );
+			if ( strlen( $filename ) > 32 ) {
+				$filename = $this->generateRandomId( 16 ) . '.jpg';
+			}
+			if ( strpos( $filename, '.' ) === false ) {
+				$filename .= '.jpg';
+			}
+		}
+		$wp_filetype = wp_check_filetype( $filename );
+		if ( wp_mkdir_p( $upload_dir['path'] ) ) {
+			$file = $upload_dir['path'] . '/' . $filename;
+		}
+		else {
+			$file = $upload_dir['basedir'] . '/' . $filename;
+		}
+		
+		// Make sure the file is unique, if not, add a number to the end of the file before the extension
+		$i = 1;
+		$parts = pathinfo( $file );
+		while ( file_exists( $file ) ) {
+			$file = $parts['dirname'] . '/' . $parts['filename'] . '-' . $i . '.' . $parts['extension'];
+			$i++;
+		}
+
+		// Write the file
+		file_put_contents( $file, $image_data );
+		$attachment = [
+			'post_mime_type' => $wp_filetype['type'],
+			'post_title' => $title ?? '',
+			'post_content' => $description ?? '',
+			'post_excerpt' => $caption ?? '',
+			'post_status' => 'inherit'
+		];
+		// Register the file as a Media Library attachment
+		$attachmentId = wp_insert_attachment( $attachment, $file );
+		require_once( ABSPATH . 'wp-admin/includes/image.php' );
+		$attachment_data = wp_generate_attachment_metadata( $attachmentId, $file );
+		wp_update_attachment_metadata( $attachmentId, $attachment_data );
+		update_post_meta( $attachmentId, '_wp_attachment_image_alt', $alt );
+		return $attachmentId;
+	}
+ 	#endregion
+
 	#region Users/Sessions Helpers
 
 	function get_nonce() {
-		if ( !is_user_logged_in() ) {
-			return null;
-		}
+		// if ( !is_user_logged_in() ) {
+		// 	return null;
+		// }
 		if ( isset( $this->nonce ) ) {
 			return $this->nonce;
 		}
@@ -262,6 +334,24 @@ class Meow_MWAI_Core
 
 	#region Other Helpers
 
+	public function check_rest_nonce( $request ) {
+    $nonce = $request->get_header( 'X-WP-Nonce' );
+    return wp_verify_nonce( $nonce, 'wp_rest' );
+  }
+
+	function generateRandomId( $length = 8, $excludeIds = [] ) {
+		$characters = '0123456789abcdefghijklmnopqrstuvwxyz';
+		$charactersLength = strlen( $characters );
+		$randomId = '';
+		for ( $i = 0; $i < $length; $i++ ) {
+			$randomId .= $characters[rand( 0, $charactersLength - 1 )];
+		}
+		if ( in_array( $randomId, $excludeIds ) ) {
+			return $this->generateRandomId( $length, $excludeIds );
+		}
+		return $randomId;
+	}
+
 	function isUrl( $url ) {
 		return strpos( $url, 'http' ) === 0 ? true : false;
 	}
@@ -321,6 +411,35 @@ class Meow_MWAI_Core
 	#endregion
 
 	#region Usage & Costs
+
+	// Quick and dirty token estimation
+  // Let's keep this synchronized with Helpers in JS
+  static function estimateTokens( $promptOrMessages, $model = null ): int
+  {
+    $text = "";
+    // https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb
+    if ( is_array( $promptOrMessages ) ) {
+      foreach ( $promptOrMessages as $message ) {
+        $role = $message['role'];
+        $content = $message['content'];
+        if ( is_array( $content ) ) {
+          foreach ( $content as $subMessage ) { 
+            if ( $subMessage['type'] === 'text' ) {
+              $text .= $subMessage['text'];
+            }
+          }
+        }
+        else {
+          $text .= "=#=$role\n$content=#=\n";
+        }
+      }
+    }
+    else {
+      $text = $promptOrMessages;
+    }
+    $tokens = 0;
+    return apply_filters( 'mwai_estimate_tokens', (int)$tokens, $text, $model );
+  }
 
 	public function dynamic_max_tokens( $tokens, $text ) {
 		// Approximation (fast, no lib)
@@ -389,7 +508,7 @@ class Meow_MWAI_Core
     ];
   }
 
-	public function recordAudioUsage( $model, $seconds ) {
+	public function record_audio_usage( $model, $seconds ) {
 		if ( !is_numeric( $seconds ) ) {
 			throw new Exception( 'Record usage: seconds is not a number.' );
 		}
@@ -413,7 +532,7 @@ class Meow_MWAI_Core
 		];
 	}
 
-  public function recordImagesUsage( $model, $resolution, $images ) {
+  public function record_images_usage( $model, $resolution, $images ) {
     if ( !$model || !$resolution || !$images ) {
       throw new Exception( 'Missing parameters for record_image_usage.' );
     }
@@ -498,13 +617,13 @@ class Meow_MWAI_Core
 					$chatbot[$key] = $value;
 				}
 			}
-			// After September 2023, let's remove this if statement.
+			// TODO: After September 2023, let's remove this if statement.
 			if ( isset( $chatbot['chatId'] ) ) {
 				$chatbot['botId'] = $chatbot['chatId'];
 				unset( $chatbot['chatId'] );
 				$hasChanges = true;
 			}
-			// After September 2023, let's remove this if statement.
+			// TODO: After September 2023, let's remove this if statement.
 			if ( empty( $chatbot['botId'] ) && $chatbot['name'] === 'default' ) {
 				$chatbot['botId'] = sanitize_title( $chatbot['name'] );
 				$hasChanges = true;
@@ -525,6 +644,30 @@ class Meow_MWAI_Core
 				// into the Settings of the chatbot).
 				$chatbot['service'] = null;
 				return $chatbot;
+			}
+		}
+		return null;
+	}
+
+	function getEnvironment( $envId ) {
+		$envs = $this->get_option( 'ai_envs' );
+		foreach ( $envs as $env ) {
+			if ( $env['id'] === $envId ) {
+				return $env;
+			}
+		}
+		return null;
+	}
+
+	function getAssistant( $envId, $assistantId ) {
+		$env = $this->getEnvironment( $envId );
+		if ( !$env ) {
+			return null;
+		}
+		$assistants = $env['assistants'];
+		foreach ( $assistants as $assistant ) {
+			if ( $assistant['id'] === $assistantId ) {
+				return $assistant;
 			}
 		}
 		return null;
@@ -582,6 +725,8 @@ class Meow_MWAI_Core
 		$options['chatbot_defaults'] = MWAI_CHATBOT_DEFAULT_PARAMS;
 		$options['default_limits'] = MWAI_LIMITS;
 		$options['openai_models'] = Meow_MWAI_Engines_OpenAI::get_openai_models();
+		$options['fallback_model'] = MWAI_FALLBACK_MODEL;
+
 		$this->options = $options;
 		return $options;
 	}
@@ -596,6 +741,133 @@ class Meow_MWAI_Core
 		if ( isset( $options['pinecone'] ) && isset( $options['pinecone']['namespace'] ) ) {
 			$options['pinecone']['namespaces'] = [ $options['pinecone']['namespace'] ];
 			unset( $options['pinecone']['namespace'] );
+			$needs_update = true;
+		}
+
+		// Support for Multi Vector DB Environments
+		// After June 2024, let's remove this.
+		if ( !isset( $options['embeddings_envs'] ) ) {
+			$options['embeddings_envs'] = [];
+			$default_id = $this->generateRandomId();
+			$pinecone = isset( $options['pinecone'] ) ? $options['pinecone'] : [];
+			$options['embeddings_envs'][] = [
+				'id' => $default_id,
+				'name' => 'Pinecone',
+				'type' => 'pinecone',
+				'apikey' => isset( $pinecone['apikey'] ) ? $pinecone['apikey'] : '',
+				'server' => isset( $pinecone['server'] ) ? $pinecone['server'] : 'gcp-starter',
+				'indexes' => isset( $pinecone['indexes'] ) ? $pinecone['indexes'] : [],
+				'namespaces' => isset( $pinecone['namespaces'] ) ? $pinecone['namespaces'] : [],
+				'index' => isset( $pinecone['index'] ) ? $pinecone['index'] : null,
+			];
+			$options['embeddings_default_env'] = $default_id;
+			$needs_update = true;
+		}
+		if ( isset( $options['pinecone'] ) ) {
+			unset( $options['pinecone'] );
+			$needs_update = true;
+		}
+
+		// Support for Multi AI Environments
+		// After June 2024, let's remove this.
+		if ( !isset( $options['ai_envs'] ) ) {
+			$options['ai_envs'] = [];
+			$default_openai_id = $this->generateRandomId();
+			$default_azure_id = $this->generateRandomId();
+			$openai_service = isset( $options['openai_service'] ) ? $options['openai_service'] : 'openai';
+			$openai_apikey = isset( $options['openai_apikey'] ) ? $options['openai_apikey'] : '';
+			$azure_endpoint = isset( $options['openai_azure_endpoint'] ) ? $options['openai_azure_endpoint'] : '';
+
+			// OpenAI
+			// We create a default OpenAI environment if the API Key is set, or if the Azure Endpoint is not set.
+			if ( !empty( $openai_apikey ) || empty( $azure_endpoint )  ) {
+				$openai_finetunes = isset( $options['openai_finetunes'] ) ? $options['openai_finetunes'] : [];
+				$openai_finetunes_deleted = isset( $options['openai_finetunes_deleted'] ) ?
+					$options['openai_finetunes_deleted'] : [];
+				$openai_legacy_finetunes = isset( $options['openai_legacy_finetunes'] ) ?
+					$options['openai_legacy_finetunes'] : [];
+				$openai_legacy_finetunes_deleted = isset( $options['openai_legacy_finetunes_deleted'] ) ?
+					$options['openai_legacy_finetunes_deleted'] : [];
+				$options['ai_envs'][] = [
+					'id' => $default_openai_id,
+					'name' => 'OpenAI',
+					'type' => 'openai',
+					'apikey' => $openai_apikey,
+					'finetunes' => $openai_finetunes,
+					'finetunes_deleted' => $openai_finetunes_deleted,
+					'legacy_finetunes' => $openai_legacy_finetunes,
+					'legacy_finetunes_deleted' => $openai_legacy_finetunes_deleted
+				];
+			}
+
+			// Azure
+			if ( !empty( $azure_endpoint ) ) {
+				$azure_apikey = isset( $options['openai_azure_apikey'] ) ? $options['openai_azure_apikey'] : '';
+				$azure_deployments = isset( $options['openai_azure_deployments'] ) ? $options['openai_azure_deployments'] : [];
+				$options['ai_envs'][] = [
+					'id' => $default_azure_id,
+					'name' => 'Azure',
+					'type' => 'azure',
+					'apikey' => $azure_apikey,
+					'endpoint' => $azure_endpoint,
+					'deployments' => $azure_deployments,
+				];
+			}
+
+			$options['ai_default_env'] = $default_openai_id;
+			if ( $openai_service === 'azure' ) {
+				$options['ai_default_env'] = $default_azure_id;
+			}
+			$needs_update = true;
+		}
+
+		if ( !empty( $options['openai_apikey'] ) || !empty( $options['openai_azure_apikey'] ) ) {
+			unset( $options['openai_apikey'] );
+			unset( $options['openai_finetunes'] );
+			unset( $options['openai_finetunes_deleted'] );
+			unset( $options['openai_legacy_finetunes'] );
+			unset( $options['openai_legacy_finetunes_deleted'] );
+			unset( $options['openai_azure_apikey'] );
+			unset( $options['openai_azure_endpoint'] );
+			unset( $options['openai_azure_deployments'] );
+			unset( $options['openai_service'] );
+			$needs_update = true;
+		}
+
+		// The IDs for the embeddings environments are generated here.
+		// TODO: We should handle this more gracefully via an option in the Embeddings Settings.
+		$embeddings_default_exists = false;
+		if ( isset( $options['embeddings_envs'] ) ) {
+			foreach ( $options['embeddings_envs'] as &$env ) {
+				if ( !isset( $env['id'] ) ) {
+					$env['id'] = $this->generateRandomId();
+					$needs_update = true;
+				}
+				if ( $env['id'] === $options['embeddings_default_env'] ) {
+					$embeddings_default_exists = true;
+				}
+			}
+		}
+		if ( !$embeddings_default_exists ) {
+			$options['embeddings_default_env'] = $options['embeddings_envs'][0]['id'] ?? null;
+			$needs_update = true;
+		}
+
+		// The IDs for the AI environments are generated here.
+		$ai_default_exists = false;
+		if ( isset( $options['ai_envs'] ) ) {
+			foreach ( $options['ai_envs'] as &$env ) {
+				if ( !isset( $env['id'] ) ) {
+					$env['id'] = $this->generateRandomId();
+					$needs_update = true;
+				}
+				if ( $env['id'] === $options['ai_default_env'] ) {
+					$ai_default_exists = true;
+				}
+			}
+		}
+		if ( !$ai_default_exists ) {
+			$options['ai_default_env'] = $options['ai_envs'][0]['id'] ?? null;
 			$needs_update = true;
 		}
 
@@ -623,6 +895,17 @@ class Meow_MWAI_Core
 	function get_option( $option, $default = null ) {
 		$options = $this->get_all_options();
 		return $options[$option] ?? $default;
+	}
+
+	function update_ai_env( $env_id, $option, $value ) {
+		$options = $this->get_all_options( true );
+		foreach ( $options['ai_envs'] as &$env ) {
+			if ( $env['id'] === $env_id ) {
+				$env[$option] = $value;
+				break;
+			}
+		}
+		return $this->update_options( $options );
 	}
 
 	function reset_options() {
