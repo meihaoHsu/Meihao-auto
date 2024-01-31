@@ -28,7 +28,7 @@
 #inputText{
     background-color: #EFB57D;
     border-radius: 30px;
-    min-height: 100px;
+    min-height: 130px;
 
 }
 .result{
@@ -42,7 +42,7 @@
 #outputText{
     background-color: #D9D9D9;
     border-radius: 30px;
-    min-height: 100px;
+    min-height: 130px;
 }
 .enter_btn{
     display: flex;
