@@ -77,40 +77,42 @@ class Meihao_translate_chat{
         $prompt = $options['prompt']; $openAIKey = $options['openAIKey']; $Language = $options['translate_languages'];
         $inputLanguage = $_POST['inputLanguage']; $outputLanguage = $_POST['outputLanguage']; $input_text = $_POST['inputText']; // 輸入的文字
 
-        $url = 'https://api.openai.com/v1/engines/text-davinci-003/completions';
-        if($input_text == ''){
-            $output = ['result'=>'0','text'=>'沒有輸入的文字!'];
-            echo json_encode($output);
-            die();
-        }
-        $prompt = sprintf($prompt,$input_text,$Language[$inputLanguage],$Language[$outputLanguage]);
-        $content = array(
-            'prompt' => $prompt,
-            'temperature' => 0.5,
-            'max_tokens' => 60,
-            'top_p' => 1,
-            'n' => 1,
-        );
+        $url = 'https://api.openai.com/v1/chat/completions'; //聊天接口
 
-// 設置 HTTP 請求的標頭
         $headers = array(
             'Content-Type: application/json',
             'Authorization: Bearer ' . $openAIKey,
         );
 
-// 初始化 cURL，設置請求內容和標頭
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($content));
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $prompt = sprintf($prompt,$input_text,$Language[$inputLanguage],$Language[$outputLanguage]);
 
-// 執行 HTTP 請求
+        $data = array(
+            'model' => 'gpt-3.5-turbo', //聊天模型
+            'temperature' => 0.5,
+            'max_tokens' => 3000,
+            'messages' => [
+                ["role" => "user", "content" => $prompt],
+            ]
+
+        );
+
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
         $response = curl_exec($ch);
+
         if  ($response !== false) {
             $result = json_decode($response, true);
-            if (isset($result['choices'][0]['text'])) {
-                $output_text = $result['choices'][0]['text'];
+            error_log(print_r('$result',1));
+            error_log(print_r($result,1));
+            if (isset($result['choices'][0]['message'])) {
+                error_log(print_r('123',1));
+                $output_text = $result['choices'][0]['message']['content'];
+                error_log(print_r('$output_text',1));
+                error_log(print_r($output_text,1));
             }
         }
 

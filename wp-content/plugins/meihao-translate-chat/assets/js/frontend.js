@@ -79,6 +79,7 @@ jQuery( function( $ ) {
             outputLanguage: outputLanguage,
             inputText: inputText,
         }, function (result) {
+            console.log(result);
             var data = JSON.parse( result );
             if (data.result === '1'){
                 $('#outputText').text('');
