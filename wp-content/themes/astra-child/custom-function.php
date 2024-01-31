@@ -191,26 +191,52 @@ class CustomFunction
         <input type="text" name="original_SKU" placeholder="原廠SKU"  value="<?=($original_SKU=get_post_meta($post->ID,'original_SKU',1))?$original_SKU:'';?>">
         <?php
     }
+    public function product_info($post){
+        $power=get_post_meta($post->ID,'power',1); $listing=get_post_meta($post->ID,'listing',1);
+        ?>
+        <label for="power">電池</label>
+        <select name="power" id="power">
+            <option value="" hidden>請選擇</option>
+            <option value="Y" <?=($power == 'Y')?'selected':''?>>可拆款</option>
+            <option value="N" <?=($power == 'N')?'selected':''?>>不可拆款</option>
+        </select>
+        <br/>
+        <label for="listing">掛牌</label>
+        <select name="listing" id="listing">
+            <option value="" hidden>請選擇</option>
+            <option value="Y" <?=($listing == 'Y')?'selected':''?>>掛牌</option>
+            <option value="N" <?=($listing == 'N')?'selected':''?>>不掛牌</option>
+        </select>
+        <?php
+    }
     public function save_data_for_custom($post_id){
         $post_type = get_post_type($post_id);
         if($post_type == 'repair'){
             if(isset($_POST['repair_title'])){
-                $subtitle_meta_box = $_POST['repair_title'];
-                update_post_meta($post_id, 'repair_title', $subtitle_meta_box);
+                $repair_title = $_POST['repair_title'];
+                update_post_meta($post_id, 'repair_title', $repair_title);
             }
             if(isset($_POST['repair_phone'])){
-                $subtitle_meta_box = $_POST['repair_phone'];
-                update_post_meta($post_id, 'repair_phone', $subtitle_meta_box);
+                $repair_phone = $_POST['repair_phone'];
+                update_post_meta($post_id, 'repair_phone', $repair_phone);
             }
             if(isset($_POST['repair_address'])){
-                $subtitle_meta_box = $_POST['repair_address'];
-                update_post_meta($post_id, 'repair_address', $subtitle_meta_box);
+                $repair_address = $_POST['repair_address'];
+                update_post_meta($post_id, 'repair_address', $repair_address);
             }
         }
         if($post_type == 'product'){
             if(isset($_POST['original_SKU'])){
                 $original_SKU = $_POST['original_SKU'];
                 update_post_meta($post_id, 'original_SKU', $original_SKU);
+            }
+            if(isset($_POST['power'])){
+                $power = $_POST['power'];
+                update_post_meta($post_id, 'power', $power);
+            }
+            if(isset($_POST['listing'])){
+                $listing = $_POST['listing'];
+                update_post_meta($post_id, 'listing', $listing);
             }
         }
 
