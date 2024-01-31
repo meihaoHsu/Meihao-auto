@@ -101,7 +101,28 @@ class CustomFunction
         add_filter('caf_get_post_read_more_filter', [$this, 'set_product_filter_content'], 999,3);//客制化filter 顯示內容
 
         add_action('wp_head',[$this,'mobile_input_disable_zoom']);//禁止輸入時zoom-in
+
+        add_filter('caf_get_post_image_filter', [$this, 'set_product_info_in_loop'], 999,3);//客制化filter 顯示內容
     }
+
+    public function set_product_info_in_loop($output, $data, $post){
+        $output = str_replace('</a>','',$output);
+        $power = get_post_meta($post->ID,'power',1);
+        if($power === 'Y'){
+            $powerString = __('Power Remove enable','astraChild');
+        }elseif ($power === 'N'){
+            $powerString = __('Power Remove disable','astraChild');
+        }
+
+//        $powerString = __('Listing','astraChild');
+//        $powerString = __('UnListing','astraChild');
+
+        if($post->post_type == 'product') {
+            $output .= "<span class='product-power-tag'>$powerString</span></a>";
+        }
+        echo $output;
+    }
+
     public function mobile_input_disable_zoom(){
         echo '<meta content="yes" name="apple-mobile-web-app-capable">';
         echo '<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">';
@@ -110,9 +131,17 @@ class CustomFunction
     public function set_product_filter_content($output, $data, $post){
         if($post->post_type == 'product'){
             $product = wc_get_product($post->ID);
+            $output = '';
+            $listing = get_post_meta($post->ID,'listing',1);
+            if($listing === 'Y'){
+                $listingString = __('Listing','astraChild');
+            }elseif ($listing === 'N'){
+                $listingString = __('UnListing','astraChild');
+            }
+            $output .= "<span style='   font-weight: 500;'>$listingString</span>";
             $color_term_ids = wc_get_product_term_ids($post->ID,'pa_color');
             if($color_term_ids){
-                $output ='<ul style="list-style: none;display: flex;flex-wrap: wrap;justify-content: space-evenly;">';
+                $output .='<ul style="list-style: none;display: flex;flex-wrap: wrap;justify-content: space-around;">';
                 foreach ($color_term_ids as $color_term_id){
                     $color = sanitize_hex_color( woo_variation_swatches()->get_frontend()->get_product_attribute_color( $color_term_id ) );
                     $output .= '<a href="'.$product->get_permalink().'">
@@ -160,14 +189,23 @@ class CustomFunction
     public function add_meta_boxes(){
         add_meta_box( 'repair-detail', '維修站點內容',  [$this,'repair_detail_meta_box'], 'repair', 'normal' );
         add_meta_box( 'OriginalSKU', '原廠SKU',  [$this,'original_SKU'], 'product', 'side','high');
+        add_meta_box( 'ProductInfo', '產品資訊',  [$this,'product_info'], 'product', 'side','high');
     }
     public function customer_post_taxonomy(){
-        register_taxonomy( 'brand', ['repair','product'], array(
-            'label' => __('Brands','astraChild'), 'hierarchical' => true,'show_admin_column' => true,
+//        register_taxonomy( 'brand', ['repair','product'], array(
+//            'label' => __('Brands','astraChild'), 'hierarchical' => true,'show_admin_column' => true,
+//            'show_in_nav_menus' => true,
+//        ));
+//        register_taxonomy( 'model', 'product', array(
+//            'label' => __('Car Type','astraChild'), 'hierarchical' => true,'show_admin_column' => true,
+//            'show_in_nav_menus' => true,
+//        ));
+        register_taxonomy( 'store', ['repair','product'], array(
+            'label' => __('Stroe','astraChild'), 'hierarchical' => true,'show_admin_column' => true,
             'show_in_nav_menus' => true,
         ));
-        register_taxonomy( 'model', 'product', array(
-            'label' => __('Car Type','astraChild'), 'hierarchical' => true,'show_admin_column' => true,
+        register_taxonomy( 'prices', 'product', array(
+            'label' => __('Prices','astraChild'), 'hierarchical' => true,'show_admin_column' => true,
             'show_in_nav_menus' => true,
         ));
         register_taxonomy( 'repair-cat', 'repair', array(
