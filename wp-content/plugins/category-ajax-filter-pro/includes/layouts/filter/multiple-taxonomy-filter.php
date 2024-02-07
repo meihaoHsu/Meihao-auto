@@ -91,6 +91,7 @@ if (is_array($tax)) {
                     echo esc_html($term_data->name) . "</label></li>";
                 }
             }
+            echo  "<p class='mulitSelectNotify'><small>(".__('mulitSelect','astraChild').")</small></p>";
             echo "</ul>";
         }
     }
