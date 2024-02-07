@@ -103,11 +103,26 @@ class CustomFunction
         add_action('wp_head',[$this,'mobile_input_disable_zoom']);//禁止輸入時zoom-in
 
         add_filter('caf_get_post_image_filter', [$this, 'set_product_info_in_loop'], 999,3);//客制化filter 顯示內容
+
+        add_action('wp_footer', [$this,'add_googleanalytics']);
+    }
+    public function add_googleanalytics(){
+        ?>
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-8EZHXB03K0"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-8EZHXB03K0');
+        </script>
+        <?php
     }
 
     public function set_product_info_in_loop($output, $data, $post){
-        $output = str_replace('</a>','',$output);
         $power = get_post_meta($post->ID,'power',1);
+        $powerString = '';
         if($power === 'Y'){
             $powerString = __('Power Remove enable','astraChild');
         }elseif ($power === 'N'){
@@ -117,7 +132,8 @@ class CustomFunction
 //        $powerString = __('Listing','astraChild');
 //        $powerString = __('UnListing','astraChild');
 
-        if($post->post_type == 'product') {
+        if($post->post_type == 'product' && $powerString != '') {
+            $output = str_replace('</a>','',$output);
             $output .= "<span class='product-power-tag'>$powerString</span></a>";
         }
         echo $output;
