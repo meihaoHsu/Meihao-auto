@@ -118,18 +118,22 @@ class Meihao_translate_chat{
 
 
 
-
         if(isset($_SESSION['trans_logs']) && $_SESSION['trans_logs'] !=''){
             $trans_logs = unserialize($_SESSION['trans_logs']);
         }
-        $log_html = "<span>$input_text</span><i class='dashicons dashicons-arrow-down-alt'></i><span>".trim($output_text)."</span>";
-        $trans_logs[]=$log_html;
-        $_SESSION['trans_logs']= serialize($trans_logs);
 
+        if($input_text !=''){
+
+            $log_html = "<span>$input_text</span><i class='dashicons dashicons-arrow-down-alt'></i><span>".trim($output_text)."</span>";
+            $trans_logs[]=$log_html;
+            $_SESSION['trans_logs']= serialize($trans_logs);
+        }else{
+            $output_text = '';
+            $log_html = '';
+        }
 
 
         $output = ['result'=>'1','text'=>trim($output_text),'log_html'=>"<p class='translate-log'>$log_html</p>"];
-
         echo json_encode($output);
         die();
     }

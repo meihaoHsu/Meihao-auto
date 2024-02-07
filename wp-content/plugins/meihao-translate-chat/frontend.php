@@ -25,7 +25,7 @@ $default_language = ['vi'=>'vi','id'=>'id_ID','zh-hant'=>'zh_TW','en'=>'en_US'];
     </select>
 </div>
 <div class="enter_btn">
-    <button id="voice-input" class="btn-info voice-button"></button>
+<!--    <button id="voice-input" class="btn-info voice-button"></button>-->
 
     <div class="translate_log">
         <div id="translate-log-open-wrapper">
@@ -46,7 +46,7 @@ $default_language = ['vi'=>'vi','id'=>'id_ID','zh-hant'=>'zh_TW','en'=>'en_US'];
 
     </div>
 
-    <button id="translate-button"><?php echo esc_html__('translation', 'Meihao-Translate-Chat'); ?></button>
+    <button id="translate-button" style="align-self: center;width: 60%;"><?php echo esc_html__('translation', 'Meihao-Translate-Chat'); ?></button>
 </div>
 <div>
     <div>
