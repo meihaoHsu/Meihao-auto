@@ -1,0 +1,229 @@
+.meihao_wrapper{
+    text-align: center;
+}
+
+.box-wrapper{
+    width:100%;
+    display: flex;
+    justify-content: space-around;
+}
+.select-box{
+    justify-content: center;
+    border: #888 1px solid;
+    border-radius: 10px;
+    padding: 10px 30px;
+    margin: 5px 0;
+    width: 20%;
+    font-size: 20px;
+    display: grid;
+    color: black;
+    background-color: #f9fafb;
+}
+.select-box:hover,.select-box:focus{
+    background-color: #f9fafb !important;
+    border: #888 1px solid;
+    color: unset !important;
+}
+.select-current,.select-date,.change-station,.open-detail,.close-detail{
+    cursor: pointer;
+}
+
+.change-station{
+    text-decoration: none !important;
+    align-content: center;
+}
+.change-font{
+    color:#000;
+    display: contents;
+    font-size: 30px;
+}
+
+.trains-station-detail{
+    width:100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+.station-btn{
+    border: #D9D9D9 1px solid;
+    border-radius: 10px;
+    width:20%;
+    padding: 5px 10px;
+    margin: 5px;
+    background: #D9D9D9;
+    color: #000;
+    display: none;
+}
+.station-btn-div{
+    display: grid;
+}
+.station-btn:hover,.station-btn:focus{
+    border: #D9D9D9 1px solid;
+    background-color: #D9D9D9 !important;
+    color: unset !important;
+}
+.search-btn{
+    margin: 10px;
+    border: none;
+    background: #A5E143;
+    color:#fff;
+}
+.station-tw{
+    font-size: 12px;
+}
+.select-input{
+    text-align: center;
+    border: none !important;
+}
+
+.keyword{
+    margin: 20px 0;
+    border-radius: 10px !important;
+    width: 98% !important;
+}
+.result-train-detail{
+    position: relative;
+    padding: 10px ;
+}
+.result-train-info{
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 10px;
+    width:100%;
+    border: #D9D9D9 1px solid;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+.train-info{
+    display: grid;
+}
+.train-detail{
+    color: #A5E143;
+}
+
+.time-info{
+    padding: 5px 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+.time-info label{
+    background: #EFB57D;
+    color:#000;
+    border-radius: 35px;
+    margin: 5px;
+    padding: 10px;
+}
+
+.close-detail{
+    position: absolute;
+    right: 10px;
+    top: 0;
+    color:#d9534f;
+    font-size: 30px;
+}
+
+.select-station small{
+    font-size:20px;
+    padding: 5px;
+    color:#000;
+}
+.select-box{
+    color:#03a84e;
+}
+.select-box input,.select-box select{
+    color:#000;
+    font-size: 20px;
+    width: 100%;
+}
+@media (max-width: 479px) {
+
+    .box-wrapper{
+        width:100%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+    .select-box{
+        font-size: 15px;
+    }
+    .select-station small{
+        padding: 10px;
+    }
+    .select-station{
+        justify-content: center;
+        width: 45%;
+    }
+    .select-date,.select-current{
+        width:60%;
+    }
+    .station-btn{
+        width:40%;
+    }
+    #date{
+        padding: .75em 0 !important;
+    }
+
+}
+
+.no-result{
+    text-align: left;
+    background: antiquewhite;
+    padding: 20px;
+}
+.no-result ul{
+    list-style: decimal;
+}
+
+/** station-btn */
+.station-wrapper{
+    display: none;
+}
+
+.train-data,.time-data{
+    width: 45%;
+}
+
+.open-detail{
+    width: 10%;
+}
+
+.train-type{
+    width: fit-content;
+    justify-self: center;
+    padding: 2px 5px;
+    border-radius: 5px;
+    color:#fff;
+}
+.train-1{
+    background: #f14444;
+}
+.train-2{
+    background: #8d8d8d;
+}
+.train-3{
+    background: #4da0d0;
+}
+.train-4{
+    background: #db7870;
+}
+.train-5{
+    background: #dbd0d0;
+}
+.train-6{
+    background: #007bff;
+}
+.train-7{
+    background: #007bff;
+}
+.train-10{
+    background: #007bff;
+}
+.train-11{
+    background: #4da0d0;
+}
+.train-arrow{
+    font-size: 13px;
+}

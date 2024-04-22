@@ -60,6 +60,7 @@
     font-weight: 700;
 }
 #changeLanguage{
+    padding: 0 10px;
     background-color: transparent;
     padding: 0;
     display: flex;

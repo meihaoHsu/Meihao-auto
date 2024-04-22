@@ -1,0 +1,42 @@
+{
+    "translation-revision-date": "2024-04-18 07:07+0000",
+    "generator": "Loco https://localise.biz/",
+    "source": "assets/js/meihao-taiwan-trains.js",
+    "domain": "Meihao-Taiwan-Trains",
+    "locale_data": {
+        "Meihao-Taiwan-Trains": {
+            "": {
+                "domain": "Meihao-Taiwan-Trains",
+                "lang": "id_ID",
+                "plural-forms": "nplurals=1; plural=0;"
+            },
+            "Arrival Time": [
+                "Jam Kedatangan"
+            ],
+            "Departure Time": [
+                "Jam Keberangkatan"
+            ],
+            "Hours": [
+                "Jam"
+            ],
+            "Minutes": [
+                "Menit"
+            ],
+            "No Taiwan Railway train number found! There are two possibilities": [
+                "Nomor kereta tidak ditemukan ! Dibawah ada 2 Kemungkinan\uff1a"
+            ],
+            "Please enter the full data!": [
+                "Mohon isi data dengan lengkap"
+            ],
+            "Station Name": [
+                "Nama Stasiun"
+            ],
+            "The Departure and Arrival station settings are incorrect.": [
+                "Stasiun awal dan akhir tidak diatur dengan benar, atau tidak ada kereta langsung dan diperlukan transfer"
+            ],
+            "The departure time is set too late and there are no trains available.": [
+                "Waktu keberangkatan tidak diatur dengan benar dan informasi kereta tidak ditemukan"
+            ]
+        }
+    }
+}

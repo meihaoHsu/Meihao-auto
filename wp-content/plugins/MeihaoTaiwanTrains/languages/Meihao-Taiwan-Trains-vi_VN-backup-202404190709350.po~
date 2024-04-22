@@ -1,0 +1,68 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Meihao-台灣火車時刻表查詢\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-04-12 02:09+0000\n"
+"PO-Revision-Date: 2024-04-19 06:42+0000\n"
+"Last-Translator: \n"
+"Language-Team: Vietnamese (Viet Nam)\n"
+"Language: vi_VN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.6.6; wp-6.2.2\n"
+"X-Domain: Meihao-Taiwan-Trains"
+
+#. URI of the plugin
+msgid "#"
+msgstr ""
+
+#: templates/Taiwan_Flights_page.php:20
+msgid "Arrival Airport"
+msgstr "Đến sân bay"
+
+#: templates/Taiwan_Trains_page.php:20
+msgid "Arrival Station"
+msgstr "Điểm đến "
+
+#: templates/Taiwan_Flights_page.php:30
+msgid "Currency"
+msgstr "Tiền tệ"
+
+#: templates/Taiwan_Flights_page.php:12
+msgid "Departure Airport"
+msgstr "khởi hành bay "
+
+#: templates/Taiwan_Trains_page.php:25 templates/Taiwan_Flights_page.php:25
+msgid "Departure Date"
+msgstr "Ngày xuất phát "
+
+#: templates/Taiwan_Trains_page.php:12
+msgid "Departure Station"
+msgstr "Điểm xuất phát "
+
+#: templates/Taiwan_Flights_page.php:6
+msgid "Flights TimeTable Search"
+msgstr "Tra cứu chuyến bay"
+
+#. Name of the plugin
+msgid "Meihao-台灣交通時刻表查詢"
+msgstr ""
+
+#. Description of the plugin
+msgid "Meihao-台灣交通時刻表查詢 by RHan"
+msgstr ""
+
+#. Author of the plugin
+msgid "RHan"
+msgstr ""
+
+#: templates/Taiwan_Trains_page.php:72 templates/Taiwan_Flights_page.php:82
+msgid "Search"
+msgstr "Tìm kiếm "
+
+#: templates/Taiwan_Trains_page.php:6
+msgid "Trains TimeTable Search"
+msgstr "Bảng tra cứu lịch trình tàu chạy"

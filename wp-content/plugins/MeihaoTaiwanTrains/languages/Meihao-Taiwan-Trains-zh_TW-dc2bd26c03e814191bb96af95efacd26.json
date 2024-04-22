@@ -1,0 +1,42 @@
+{
+    "translation-revision-date": "2024-04-18 06:54+0000",
+    "generator": "Loco https://localise.biz/",
+    "source": "assets/js/meihao-taiwan-trains.js",
+    "domain": "Meihao-Taiwan-Trains",
+    "locale_data": {
+        "Meihao-Taiwan-Trains": {
+            "": {
+                "domain": "Meihao-Taiwan-Trains",
+                "lang": "zh_TW",
+                "plural-forms": "nplurals=1; plural=0;"
+            },
+            "Arrival Time": [
+                "\u5230\u7ad9\u6642\u9593"
+            ],
+            "Departure Time": [
+                "\u96e2\u7ad9\u6642\u9593"
+            ],
+            "Hours": [
+                "\u6642"
+            ],
+            "Minutes": [
+                "\u5206"
+            ],
+            "No Taiwan Railway train number found! There are two possibilities": [
+                "\u627e\u4e0d\u5230\u53f0\u9435\u8eca\u6b21!\u6709\u4ee5\u4e0b\u5169\u7a2e\u53ef\u80fd\uff1a"
+            ],
+            "Please enter the full data!": [
+                "\u8acb\u8f38\u5165\u5b8c\u6574\u8cc7\u6599"
+            ],
+            "Station Name": [
+                "\u8eca\u7ad9\u7ad9\u540d"
+            ],
+            "The Departure and Arrival station settings are incorrect.": [
+                "\u8d77\u8a16\u7ad9\u8a2d\u5b9a\u932f\u8aa4\uff0c\u6216\u662f\u7121\u76f4\u9054\u8eca\u9808\u8f49\u7a0b\u3002"
+            ],
+            "The departure time is set too late and there are no trains available.": [
+                "\u51fa\u767c\u6642\u9593\u8a2d\u5b9a\u6709\u8aa4\uff0c\u67e5\u8a62\u4e0d\u5230\u8eca\u6b21\u8cc7\u6599\u3002"
+            ]
+        }
+    }
+}

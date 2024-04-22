@@ -1,0 +1,42 @@
+{
+    "translation-revision-date": "2024-04-18 07:07+0000",
+    "generator": "Loco https://localise.biz/",
+    "source": "assets/js/meihao-taiwan-trains.js",
+    "domain": "Meihao-Taiwan-Trains",
+    "locale_data": {
+        "Meihao-Taiwan-Trains": {
+            "": {
+                "domain": "Meihao-Taiwan-Trains",
+                "lang": "vi_VN",
+                "plural-forms": "nplurals=1; plural=0;"
+            },
+            "Arrival Time": [
+                "Th\u1eddi gian \u0111\u1ebfn"
+            ],
+            "Departure Time": [
+                "Gi\u1edd kh\u1edfi h\u00e0nh "
+            ],
+            "Hours": [
+                "Gi\u1edd"
+            ],
+            "Minutes": [
+                "Ph\u00fat "
+            ],
+            "No Taiwan Railway train number found! There are two possibilities": [
+                "Kh\u00f4ng t\u00ecm th\u1ea5y s\u1ed1 t\u00e0u ! C\u00f3 2 kh\u1ea3 n\u0103ng"
+            ],
+            "Please enter the full data!": [
+                "Vui l\u00f2ng nh\u1eadp th\u00f4ng tin chi ti\u1ebft \u0111\u1ea7y \u0111\u1ee7 c\u1ee7a b\u1ea1n"
+            ],
+            "Station Name": [
+                "T\u00ean ga t\u00e0u \u0111i\u1ec7n"
+            ],
+            "The Departure and Arrival station settings are incorrect.": [
+                "\"C\u00e1c tr\u1ea1m kh\u1edfi h\u00e0nh v\u00e0 ga \u0111\u1ebfn c\u00e0i \u0111\u1eb7t kh\u00f4ng ch\u00ednh x\u00e1c, ho\u1eb7c l\u00e0\n kh\u00f4ng c\u00f3 chuy\u1ebfn t\u00e0u tr\u1ef1c ti\u1ebfp n\u00e0o c\u1ea7n \u0111\u01b0\u1ee3c chuy\u1ec3n\""
+            ],
+            "The departure time is set too late and there are no trains available.": [
+                "Th\u1eddi gian kh\u1edfi h\u00e0nh c\u00e0i \u0111\u1eb7t kh\u00f4ng ch\u00ednh x\u00e1c, t\u00ecm ki\u1ebfm kh\u00f4ng th\u1ea5y th\u00f4ng tin chuy\u1ebfn t\u00e0u "
+            ]
+        }
+    }
+}
