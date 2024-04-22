@@ -3,7 +3,7 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="1418e05f-a667-4396-9df9-5d01f90e6087" name="meihao-auto">
-        <fileTransfer rootFolder="/var/www/meihao-auto.tw/htdocs" accessType="SFTP" host="139.162.76.12" port="22" sshConfigId="1e0efcae-c62c-41bd-98f3-aa53599e519d" sshConfig="meihao-auto">
+        <fileTransfer rootFolder="/var/www/meihao-auto.tw/htdocs" accessType="SFTP" host="103.29.68.104" port="22" sshConfigId="61b96e2d-631a-4d08-81f4-ecbf13580b4f" sshConfig="Meihao">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
