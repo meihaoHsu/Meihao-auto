@@ -105,6 +105,8 @@ class CustomFunction
         add_filter('caf_get_post_image_filter', [$this, 'set_product_info_in_loop'], 999,3);//客制化filter 顯示內容
 
         add_action('wp_footer', [$this,'add_googleanalytics']);
+
+        add_filter( 'rank_math/sitemap/enable_caching', '__return_false');
     }
     public function add_googleanalytics(){
         ?>
@@ -172,10 +174,11 @@ class CustomFunction
             $repair_address = get_post_meta($post->ID, 'repair_address', 1);
 
             $link = 'https://www.google.com/maps/place/'.urlencode($repair_address);
+            $iosURL = 'comgooglemapsurl://www.google.com/maps/place/'.urlencode($repair_address);
             $output = '<div class="filter-repair-detail">';
             $output .= '<div class="repair-detail-title">' . $repair_title . '</div>';
             $output .= '<a href="tel:'.$repair_phone.'"><div class="repair-detail-phone">' . $repair_phone . '</div></a>';
-            $output .= '<a href="'.$link.'" target="_blank"><div class="repair-detail-address">' . $repair_address . '</div></a>';
+            $output .= '<a href="'.$link.'" target="_blank" class="repair-detail-url" data-iosURL="'.$iosURL.'"><div class="repair-detail-address">' . $repair_address . '</div></a>';
             $output .= '</div>';
         }
 
@@ -541,6 +544,8 @@ class CustomFunction
      */
     public function load_global_js_files()
     {
+        wp_enqueue_script("WTN-js", 'https://unpkg.com/webtonative@1.0.29/webtonative.min.js', ['jquery'], false, true);
+
         $directory = '/assets/js/global/';
         $files = glob(LIT_DIR . $directory . '*.js');
         foreach ($files as $key => $file) {
