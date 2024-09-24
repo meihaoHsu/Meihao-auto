@@ -9,6 +9,13 @@
           </advancedOptions>
         </fileTransfer>
       </webServer>
+      <webServer id="a9f748bc-52e8-4362-8978-cc3610b8050d" name="Meihao-Auto Server">
+        <fileTransfer rootFolder="/var/www/meihao-auto.tw/htdocs" accessType="SFTP" host="172.104.98.70" port="22" sshConfigId="c6fb49a5-bf3e-403f-9bdd-e09883aeda87" sshConfig="Auto">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
     </option>
   </component>
 </project>

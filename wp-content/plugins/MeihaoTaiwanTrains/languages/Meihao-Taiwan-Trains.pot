@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Meihao-台灣火車時刻表查詢\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-19 07:10+0000\n"
+"POT-Creation-Date: 2024-04-19 07:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -20,7 +20,7 @@ msgstr ""
 msgid "#"
 msgstr ""
 
-#: templates/Taiwan_Flights_page.php:21
+#: templates/Taiwan_Flights_page.php:20
 msgid "Arrival Airport"
 msgstr ""
 
@@ -28,7 +28,7 @@ msgstr ""
 msgid "Arrival Station"
 msgstr ""
 
-#: templates/Taiwan_Flights_page.php:31
+#: templates/Taiwan_Flights_page.php:30
 msgid "Currency"
 msgstr ""
 
@@ -36,7 +36,7 @@ msgstr ""
 msgid "Departure Airport"
 msgstr ""
 
-#: templates/Taiwan_Trains_page.php:25 templates/Taiwan_Flights_page.php:26
+#: templates/Taiwan_Trains_page.php:25 templates/Taiwan_Flights_page.php:25
 msgid "Departure Date"
 msgstr ""
 
@@ -44,7 +44,7 @@ msgstr ""
 msgid "Departure Station"
 msgstr ""
 
-#: templates/Taiwan_Flights_page.php:6 templates/Taiwan_Flights_page.php:13
+#: templates/Taiwan_Flights_page.php:6
 msgid "Flights TimeTable Search"
 msgstr ""
 
@@ -60,7 +60,7 @@ msgstr ""
 msgid "RHan"
 msgstr ""
 
-#: templates/Taiwan_Trains_page.php:72 templates/Taiwan_Flights_page.php:83
+#: templates/Taiwan_Trains_page.php:72 templates/Taiwan_Flights_page.php:82
 msgid "Search"
 msgstr ""
 

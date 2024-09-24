@@ -30,6 +30,10 @@ if(!class_exists('MTT_Plugin')){
         }
         function meihao_taiwan_flights_frontend(){
             ob_start();
+            echo "determine_locale:";
+            print_r(determine_locale());
+            echo " is_textdomain_loaded:";
+            print_r( is_textdomain_loaded('Meihao-Taiwan-Trains'));
             include MTT_DIR.'/templates/Taiwan_Flights_page.php';
 
             $shortcodeTemplate = ob_get_clean();
